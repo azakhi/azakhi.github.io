@@ -24,6 +24,7 @@
             var attrs = ["Strength", "Agility", "Intelligence", "Charisma"];
             var skills = ["Ironflesh", "Power Strike", "Power Throw", "Power Draw", "Weapon Master", "Shield", "Athletics", "Riding", "Horse Archery", "Looting", "Trainer", "Tracking", "Tactics", "Path-finding", "Spotting", "Inventory Managment", "Wound Treatment", "Surgery", "First Aid", "Engineer", "Persuasion", "Prisoner Management", "Leadership", "Trade"];
             var profs = ["One Handed Weapons", "Two Handed Weapons", "Polearms", "Archery", "Crossbows", "Throwing"];
+            var notes = ["Empire Relation", "Fierdsvain Relation", "Sarleon Relation", "Ravenstern relation", "D'Shar Relation", "Inquisition Relation", "Griffon Relation", "Lion Relation", "Renegade Knights Relation", "Adventurer Companies Relation", "Snake Cult Relation", "D'Shar Raiders Relation", "Singalians Relation", "King Ulric Relation", "Kadan Bahadur Khan Relation"];
             var base = {
                 attrs: [6, 5, 4, 5],
                 skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0],
@@ -66,7 +67,10 @@
                         honor: [1, 0],
                         renown: [100, 60],
                         items: [["Fine Cross Hilt Noble Sword"], ["Balanced Cross Hilt Noble Sword", "Spirited Courser"]],
-                        other: [["Empire relation: -10"], ["Empire relation: -10"]]
+                        notes: [
+                            [[0, -10]],
+                            [[0, -10]]
+                        ]
                     },
                     {
                         text: "A merchant ship captain",
@@ -77,7 +81,7 @@
                         gold: 3000,
                         renown: 20,
                         items: ["Tabard", "Pottery x2"],
-                        other: ["Fierdsvain relation: +5"]
+                        notes: [[1, 5]]
                     },
                     {
                         text: "A former knight",
@@ -88,7 +92,8 @@
                         gold: 350,
                         renown: 10,
                         items: ["White and Green Long Surcoat"],
-                        other: ["Sarleon relation: -10", "A) randomly select Dragons or Eventide, then -5 to the current relation, B) repeat A one more time"]
+                        notes: [[2, -10]],
+                        other: ["A) randomly select Dragons or Eventide, then -5 to the current relation, B) repeat A one more time"]
                     },
                     {
                         text: "A retired noble adventurer",
@@ -97,8 +102,7 @@
                         skills: [0, 2, 0, 1, 1, 0, 1, 2, 0, 2, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                         profs: [40, 30, 30, 40, 0, 0],
                         gold: 350,
-                        items: ["Mail with Surcoat", "Singalian Arrows"],
-                        other: ["Sarleon relation: -10", "A) randomly select Dragons or Eventide, then -5 to the current relation, B) repeat A one more time"]
+                        items: ["Mail with Surcoat", "Singalian Arrows"]
                     },
                     {
                         text: "A wandering nomad clan leader",
@@ -118,7 +122,10 @@
                         gold: [350, 150],
                         renown: [10, 0],
                         items: [["D'Shar Mail Shirt"], ["D'Shar Courser"]],
-                        other: [["D'Shar relation: -10", "Inquisition relation: -10"], ["D'Shar relation: -10", "Inquisition relation: -10"]]
+                        notes: [
+                            [[4, -10], [5, -10]], 
+                            [[4, -10], [5, -10]]
+                        ]
                     },
                     {
                         text: "A rough and mysterious figure",
@@ -375,14 +382,23 @@
                         honor: [2, 2, 13, 3, 3, 0, 3],
                         renown: [0, 10, 30, 10, 10, 0, 10],
                         items: [[], [], ["Exquisite Sarleon Knight Longsword"], ["Old Barclay Plate and Chain"], [], ["Metal Spiked Mace"], []],
+                        notes: [
+                            [[0, -10], [2, -10], [3, -10], [10, -20], [13, -10], [6, 15], [7, -5]],
+                            [[0, -10], [2, -10], [3, -10], [10, -20], [13, -10], [1, 5]],
+                            [[0, -10], [2, -10], [3, -10], [10, -20], [13, -10], [8, 10]],
+                            [[0, -10], [2, -10], [3, -10], [10, -20], [13, -10], [9, 10]],
+                            [[0, -10], [2, -10], [3, -10], [10, -20], [13, -10], [12, -10], [11, 10], [14, -5]],
+                            [[0, -10], [2, -10], [3, -10], [10, -20], [13, -10]],
+                            [[0, -10], [2, -10], [3, -10], [10, -20], [13, -10]]
+                        ],
                         other: [
-                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Griffon relation +15", "Lion relation -5"],
-                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Fierdsvain relation +5"],
-                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Renegade Knights relation +10"],
-                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Adventurer Companies relation +10"],
-                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Singalians relation -10", "D'Shar Raiders relation +10", "Kadan Bahadur Khan relation -5"]
-                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter"],
-                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter"]
+                            ["Will always allow creating Griffon chapter"],
+                            ["Will always allow creating Griffon chapter"],
+                            ["Will always allow creating Griffon chapter"],
+                            ["Will always allow creating Griffon chapter"],
+                            ["Will always allow creating Griffon chapter"],
+                            ["Will always allow creating Griffon chapter"],
+                            ["Will always allow creating Griffon chapter"]
                         ]
                     }
                 ]
@@ -456,7 +472,10 @@
                 var renown = 0;
                 var rumor = 7;
                 var items = "<li class=\"list-group-item active\">Items</li>";
-                var other = "<li class=\"list-group-item active\">Notes</li>";
+                var other = "";
+                var noteVals = [];
+                for(var i = 0; i < notes.length; i++)
+                    noteVals[i] = 0;
                 
                 for(var i = 0; i < stages.length; i++) {
                     var sel = $('#stage' + i).val();
@@ -505,6 +524,9 @@
                                 for(var j= 0; j < stages[i][sel].items.length; j++) {
                                     items += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].items[j] + "</li>";
                                 }
+                            if('notes' in stages[i][sel])
+                                for(var j= 0; j < stages[i][sel].notes.length; j++)
+                                    noteVals[stages[i][sel].notes[j][0]] += stages[i][sel].notes[j][1];
                             if('other' in stages[i][sel])
                                 for(var j= 0; j < stages[i][sel].other.length; j++) {
                                     other += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].other[j] + "</li>";
@@ -552,6 +574,9 @@
                                     for(var j= 0; j < stages[i][sel].items[depSel].length; j++) {
                                         items += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].items[depSel][j] + "</li>";
                                     }
+                                if('notes' in stages[i][sel])
+                                    for(var j= 0; j < stages[i][sel].notes[depSel].length; j++)
+                                        noteVals[stages[i][sel].notes[depSel][j][0]] += stages[i][sel].notes[depSel][j][1];
                                 if('other' in stages[i][sel])
                                     for(var j= 0; j < stages[i][sel].other[depSel].length; j++) {
                                         other += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].other[depSel][j] + "</li>";
@@ -604,10 +629,17 @@
                     proftext += "<li class=\"list-group-item\">" + profs[i] + " :<span class=\"float-right font-weight-bold\">" + copyProf[i] + "</span></li>";
                 }
                 
+                var notestext = "<li class=\"list-group-item active\">Notes</li>";
+                for(var i = 0; i < noteVals.length; i++)
+                    if(noteVals[i] > 0)
+                        notestext += "<li class=\"list-group-item\">&#x25C9; " + notes[i] + " :<span class=\"float-right font-weight-bold text-success\">" + noteVals[i] + "</span></li>";
+                    else if(noteVals[i] < 0)
+                        notestext += "<li class=\"list-group-item\">&#x25C9; " + notes[i] + " :<span class=\"float-right font-weight-bold text-danger\">" + noteVals[i] + "</span></li>";
+                
                 $('#sumList').html(sltext);
                 $('#profList').html(proftext);
                 $('#itemList').html(items);
-                $('#otherList').html(other);
+                $('#otherList').html(notestext + other);
                 
                 var link = $('#stage0').val();
                 for(var i = 1; i < stages.length; i++) {
