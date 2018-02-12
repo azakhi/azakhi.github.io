@@ -12,16 +12,25 @@
         .table td {
             text-align: center;
         }
+        .totalRow th, .totalRow td {
+            font-size: 20px;
+            font-weight: 700;
+            border-top: 2px solid #dee2e6;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
             var attrs = ["Strength", "Agility", "Intelligence", "Charisma"];
             var skills = ["Ironflesh", "Power Strike", "Power Throw", "Power Draw", "Weapon Master", "Shield", "Athletics", "Riding", "Horse Archery", "Looting", "Trainer", "Tracking", "Tactics", "Path-finding", "Spotting", "Inventory Managment", "Wound Treatment", "Surgery", "First Aid", "Engineer", "Persuasion", "Prisoner Management", "Leadership", "Trade"];
+            var profs = ["One Handed Weapons", "Two Handed Weapons", "Polearms", "Archery", "Crossbows", "Throwing"];
             var base = {
-                        attrs: [6, 5, 4, 5],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0]
-                    };
+                attrs: [6, 5, 4, 5],
+                skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0],
+                profs: [15, 15, 15, 15, 15, 15],
+                gold: 300,
+                rumor: 7
+            };
             var stages = [
                 [
                     {
@@ -48,25 +57,48 @@
                         skills: [
                             [0, 2, 0, 0, 1, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
                             [0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 4, 0, 2, 0]
-                        ]
+                        ],
+                        profs: [
+                            [40, 40, 40, 0, 0, 0],
+                            [40, 0, 0, 0, 0, 0]
+                        ],
+                        gold: [300, 300],
+                        honor: [1, 0],
+                        renown: [100, 60],
+                        items: [["Fine Cross Hilt Noble Sword"], ["Balanced Cross Hilt Noble Sword", "Spirited Courser"]],
+                        other: [["Empire relation: -10"], ["Empire relation: -10"]]
                     },
                     {
                         text: "A merchant ship captain",
                         depends: -1,
                         attrs: [0, 0, 2, 4],
-                        skills: [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 1, 0, 0, 3]
+                        skills: [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 1, 0, 0, 3],
+                        profs: [0, 20, 0, 0, 0, 0],
+                        gold: 3000,
+                        renown: 20,
+                        items: ["Tabard", "Pottery x2"],
+                        other: ["Fierdsvain relation: +5"]
                     },
                     {
                         text: "A former knight",
                         depends: -1,
                         attrs: [3, 2, 0, 1],
-                        skills: [1, 2, 0, 0, 1, 1, 1, 2, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        skills: [1, 2, 0, 0, 1, 1, 1, 2, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        profs: [60, 65, 60, 0, 0, 0],
+                        gold: 350,
+                        renown: 10,
+                        items: ["White and Green Long Surcoat"],
+                        other: ["Sarleon relation: -10", "A) randomly select Dragons or Eventide, then -5 to the current relation, B) repeat A one more time"]
                     },
                     {
-                        text: "A retired noble adventurert",
+                        text: "A retired noble adventurer",
                         depends: -1,
                         attrs: [2, 2, 2, 0],
-                        skills: [0, 2, 0, 1, 1, 0, 1, 2, 0, 2, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        skills: [0, 2, 0, 1, 1, 0, 1, 2, 0, 2, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        profs: [40, 30, 30, 40, 0, 0],
+                        gold: 350,
+                        items: ["Mail with Surcoat", "Singalian Arrows"],
+                        other: ["Sarleon relation: -10", "A) randomly select Dragons or Eventide, then -5 to the current relation, B) repeat A one more time"]
                     },
                     {
                         text: "A wandering nomad clan leader",
@@ -78,19 +110,33 @@
                         skills: [
                             [0, 0, 0, 2, 0, 0, 1, 2, 2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 1, 3, 1, 1, 0, 1, 0, 3, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0]
-                        ]
+                        ],
+                        profs: [
+                            [20, 0, 10, 50, 0, 10],
+                            [5, 0, 0, 30, 0, 15]
+                        ],
+                        gold: [350, 150],
+                        renown: [10, 0],
+                        items: [["D'Shar Mail Shirt"], ["D'Shar Courser"]],
+                        other: [["D'Shar relation: -10", "Inquisition relation: -10"], ["D'Shar relation: -10", "Inquisition relation: -10"]]
                     },
                     {
                         text: "A rough and mysterious figure",
                         depends: -1,
                         attrs: [0, 4, 2, 0],
-                        skills: [0, 0, 3, 0, 0, 0, 2, 0, 0, 3, 0, 1, 2, 0, 2, 1, 0, 0, 1, 0, 1, 1, 0, 2]
+                        skills: [0, 0, 3, 0, 0, 0, 2, 0, 0, 3, 0, 1, 2, 0, 2, 1, 0, 0, 1, 0, 1, 1, 0, 2],
+                        profs: [30, 0, 0, 0, 50, 50],
+                        gold: 25
                     },
                     {
                         text: "A respectable physician",
                         depends: -1,
                         attrs: [1, 2, 3, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 1, 3, 3, 3, 0, 0, 1, 1, 2]
+                        skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 1, 3, 3, 3, 0, 0, 1, 1, 2],
+                        profs: [10, 0, 0, 0, 20, 0],
+                        gold: 1010,
+                        renown: 30,
+                        items: ["The complete Manual of Herbal Remedies of Pendor (Book)"]
                     }
                 ],
                 [
@@ -98,31 +144,45 @@
                         text: "Arranged for you to serve a minor Barclay Noble",
                         depends: -1,
                         attrs: [1, 0, 1, 2],
-                        skills: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 0]
+                        skills: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 0],
+                        profs: [25, 0, 5, 0, 0, 0],
+                        renown: 15
                     },
                     {
                         text: "Sent you to be an apprentice to the local guild craftsman",
                         depends: -1,
                         attrs: [1, 0, 2, 1],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 1]
+                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 1],
+                        profs: [0, 0, 0, 0, 30, 0],
+                        gold: 600,
+                        renown: 30,
+                        items: ["Steel Bolts"]
                     },
                     {
                         text: "Put you in the care of a successful merchant",
                         depends: -1,
                         attrs: [0, 0, 3, 1],
-                        skills: [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1]
+                        skills: [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1],
+                        profs: [0, 0, 0, 0, 0, 0],
+                        gold: 1500
                     },
                     {
                         text: "Left you to fend for yourself",
                         depends: -1,
                         attrs: [0, 2, 2, 0],
-                        skills: [1, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        skills: [1, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        profs: [25, 0, 0, 0, 25, 15],
+                        rumor: 4
                     },
                     {
                         text: "Sent you out on your own to hunt in the wilds",
                         depends: -1,
                         attrs: [2, 2, 0, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        profs: [0, 0, 0, 35, 0, 0],
+                        gold: 100,
+                        renown: 5,
+                        items: ["Dark Steppe Horse"]
                     }
                 ],
                 [
@@ -136,37 +196,62 @@
                         skills: [
                             [0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
                             [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 2, 0]
-                        ]
+                        ],
+                        profs: [
+                            [30, 30, 30, 10, 30, 10],
+                            [10, 0, 0, 35, 0, 0]
+                        ],
+                        gold: [100, 100],
+                        renown: [10, 0],
+                        items: [["Red Surcoat on Fine Mail"], ["Spirited Courser"]]
                     },
                     {
                         text: "A bard",
                         depends: -1,
                         attrs: [0, 0, 0, 2],
-                        skills: [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 0, 2, 0]
+                        skills: [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 0, 2, 0],
+                        profs: [25, 0, 0, 0, 30, 0],
+                        gold: 200,
+                        renown: 30,
+                        items: ["Lute"],
+                        rumor: 4
                     },
                     {
                         text: "A scholar at a local Barclay university",
                         depends: -1,
                         attrs: [0, 0, 2, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0]
+                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0],
+                        profs: [20, 0, 0, 0, 20, 0],
+                        gold: 700,
+                        items: ["Random Book"]
                     },
                     {
                         text: "A self employed merchant",
                         depends: -1,
                         attrs: [0, 0, 1, 1],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 0, 2]
+                        skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 0, 2],
+                        profs: [15, 0, 0, 0, 0, 0],
+                        gold: 1200,
+                        items: ["Winged Mace"],
+                        rumor: 5
                     },
                     {
                         text: "An engineer and builder",
                         depends: -1,
                         attrs: [1, 0, 1, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 0]
+                        skills: [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 0],
+                        profs: [15, 0, 0, 0, 0, 0],
+                        gold: 700
                     },
                     {
                         text: "A tracker and hunter",
                         depends: -1,
                         attrs: [1, 1, 0, 0],
-                        skills: [0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        skills: [0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        profs: [0, 0, 20, 35, 0, 0],
+                        gold: 200,
+                        items: ["Short Composite Bow", "Furs X2"],
+                        rumor: 6
                     }
                 ],
                 [
@@ -188,13 +273,40 @@
                             [1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                             [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                             [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                        ]
+                        ],
+                        profs: [
+                            [20, 0, 0, 0, 0, 0],
+                            [10, 0, 0, 0, 20, 0],
+                            [0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0],
+                            [10, 0, 0, 20, 0, 0]
+                        ],
+                        gold: [100, 0, 0, 200, 100, 0]
                     },
                     {
                         text: "You received a message that your father has died",
-                        depends: -1,
-                        attrs: [0, 1, 0, 2],
-                        skills: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0]
+                        depends: 1,
+                        attrs: [
+                            [0, 1, 0, 2],
+                            [0, 1, 0, 2],
+                            [0, 1, 0, 2],
+                            [0, 1, 0, 2],
+                            [0, 1, 0, 2],
+                            [0, 1, 0, 2],
+                            [0, 1, 0, 2]
+                        ],
+                        skills: [
+                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0]
+                        ],
+                        gold: [0, 1000, 0, 0, 0, 100, 0],
+                        items: [["Crude Coat of Plates - Yellow"], [], ["Sarleon Knight Longsword"], ["Barclay Plate and Chain"], ["D'Shar Bow", "Scimitar"], ["Assassin Throwing Knives"], ["The Field Surgeon's Handbook (Book)"]]
                     },
                     {
                         text: "A series of unfortunate events",
@@ -214,7 +326,8 @@
                             [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
                             [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0]
-                        ]
+                        ],
+                        gold: [1000, 0, 100, 0, 100, 0]
                     },
                     {
                         text: "Too many enemies that seek to end your life",
@@ -234,13 +347,43 @@
                             [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
                             [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1],
                             [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1]
-                        ]
+                        ],
+                        gold: [0, 0, 0, 0, 100, 0]
                     },
                     {
                         text: "A letter that changed your life forever",
-                        depends: -1,
-                        attrs: [0, 1, 2, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        depends: 1,
+                        attrs: [
+                            [0, 1, 2, 0],
+                            [0, 1, 2, 0],
+                            [0, 1, 2, 0],
+                            [0, 1, 2, 0],
+                            [0, 1, 2, 0],
+                            [0, 1, 2, 0],
+                            [0, 1, 2, 0]
+                        ],
+                        skills: [
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        ],
+                        gold: [0, 800, 0, 0, 0, 500, 500],
+                        honor: [2, 2, 13, 3, 3, 0, 3],
+                        renown: [0, 10, 30, 10, 10, 0, 10],
+                        items: [[], [], ["Exquisite Sarleon Knight Longsword"], ["Old Barclay Plate and Chain"], [], ["Metal Spiked Mace"], []],
+                        other: [
+                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Griffon relation +15", "Lion relation -5"],
+                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Fierdsvain relation +5"],
+                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Renegade Knights relation +10"],
+                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Adventurer Companies relation +10"],
+                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter", "Singalians relation -10", "D'Shar Raiders relation +10", "Kadan Bahadur Khan relation -5"]
+                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter"],
+                            ["Sarleon relation -10", "Ravenstern relation -10", "Empire relation -10", "Snake Cult relation -20", "King Ulric relation -10", "Will always allow creating Griffon chapter"]
+                        ]
                     }
                 ]
             ];
@@ -292,7 +435,7 @@
             }
             
             // add sum row
-            sttext += "<tr>";
+            sttext += "<tr class=\"totalRow\">";
             sttext += "<th scope=\"row\">Total</th>";
             
             // add cells
@@ -307,6 +450,13 @@
             $('select').on('change', function() {
                 var copyAttr = base.attrs.slice(0);
                 var copySkill = base.skills.slice(0);
+                var copyProf = base.profs.slice(0);
+                var gold = 300;
+                var honor = 0;
+                var renown = 0;
+                var rumor = 7;
+                var items = "<li class=\"list-group-item active\">Items</li>";
+                var other = "<li class=\"list-group-item active\">Notes</li>";
                 
                 for(var i = 0; i < stages.length; i++) {
                     var sel = $('#stage' + i).val();
@@ -320,6 +470,7 @@
                         var dep = stages[i][sel].depends;
                         var val = 0;
                         if(dep == -1) {
+                            // fill in attr and skill values
                             cells.each(function(n, item){
                                 if(n < copyAttr.length) {
                                     val = stages[i][sel].attrs[n];
@@ -334,6 +485,30 @@
                                 else
                                     $(item).html(val);
                             });
+                            
+                            // add other things
+                            if('profs' in stages[i][sel])
+                                for(var j= 0; j < copyProf.length; j++) {
+                                    copyProf[j] += stages[i][sel].profs[j];
+                                }
+                            
+                            if('gold' in stages[i][sel])
+                                gold += stages[i][sel].gold;
+                            if('honor' in stages[i][sel])
+                                honor += stages[i][sel].honor;
+                            if('renown' in stages[i][sel])
+                                renown += stages[i][sel].renown;
+                            if('rumor' in stages[i][sel])
+                                if(stages[i][sel].rumor < rumor)
+                                    rumor = stages[i][sel].rumor;
+                            if('items' in stages[i][sel])
+                                for(var j= 0; j < stages[i][sel].items.length; j++) {
+                                    items += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].items[j] + "</li>";
+                                }
+                            if('other' in stages[i][sel])
+                                for(var j= 0; j < stages[i][sel].other.length; j++) {
+                                    other += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].other[j] + "</li>";
+                                }
                         }
                         else {
                             var depSel = $('#stage' + dep).val();
@@ -357,11 +532,37 @@
                                     else
                                         $(item).html(val);
                                 });
+                                
+                                // add other things
+                                if('profs' in stages[i][sel])
+                                    for(var j= 0; j < copyProf.length; j++) {
+                                        copyProf[j] += stages[i][sel].profs[depSel][j];
+                                    }
+                                
+                                if('gold' in stages[i][sel])
+                                    gold += stages[i][sel].gold[depSel];
+                                if('honor' in stages[i][sel])
+                                    honor += stages[i][sel].honor[depSel];
+                                if('renown' in stages[i][sel])
+                                    renown += stages[i][sel].renown[depSel];
+                                if('rumor' in stages[i][sel])
+                                    if(stages[i][sel].rumor < rumor)
+                                        rumor = stages[i][sel].rumor[depSel];
+                                if('items' in stages[i][sel])
+                                    for(var j= 0; j < stages[i][sel].items[depSel].length; j++) {
+                                        items += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].items[depSel][j] + "</li>";
+                                    }
+                                if('other' in stages[i][sel])
+                                    for(var j= 0; j < stages[i][sel].other[depSel].length; j++) {
+                                        other += "<li class=\"list-group-item\">&#x25C9; " + stages[i][sel].other[depSel][j] + "</li>";
+                                    }
                             }
                         }
                     }
                 }
                 
+                var totalSkill = 0;
+                var totalWasted = 0;
                 var cells = $('#resTab > tbody > tr:nth-child(' + (stages.length+2) + ') > td');
                 cells.each(function(n, item){
                     if(n < copyAttr.length)
@@ -372,13 +573,41 @@
                             $(item).html('');
                         }
                         else if(sum > 7) {
-                            $(item).html(7 + " <span class=\"bg-danger\" title=\"Skills are limited at 7!\">-" + (sum - 7) + "</span>");
+                            totalSkill += 7;
+                            totalWasted += sum - 7;
+                            $(item).html(7 + " <span class=\"text-danger\" title=\"Skills are limited at 7!\">-" + (sum - 7) + "</span>");
                         }
                         else {
+                            totalSkill += sum;
                             $(item).html(sum);
                         }
                     }
                 });
+                
+                var sltext = "";
+                if($('#stage1').val() != 1 && $('#stage1').val() != 4 && $('#stage1').val() != 5)
+                    sltext += "<li class=\"list-group-item\">Banner :<span class=\"float-right font-weight-bold text-success\">Yes</span></li>";
+                else
+                    sltext += "<li class=\"list-group-item\">Banner :<span class=\"float-right font-weight-bold text-danger\">No</span></li>";
+                sltext += "<li class=\"list-group-item\">Gold :<span class=\"float-right font-weight-bold\">" + gold + "</span></li>";
+                sltext += "<li class=\"list-group-item\">Honor :<span class=\"float-right font-weight-bold\">" + honor + "</span></li>";
+                sltext += "<li class=\"list-group-item\">Renown :<span class=\"float-right font-weight-bold\">" + renown + "</span></li>";
+                sltext += "<li class=\"list-group-item\">Rumor Interval :<span class=\"float-right font-weight-bold\">" + rumor + "</span></li>";
+                sltext += "<li class=\"list-group-item\">Total # of Skills :<span class=\"float-right font-weight-bold\">" + totalSkill;
+                if(totalWasted > 0)
+                    sltext += " <span class=\"text-danger\" title=\"Skills are limited at 7!\">-" + totalWasted + "</span>";
+                sltext += "</span></li>";
+                
+                var proftext = "<li class=\"list-group-item active\">Weapon Proficiencies</li>";
+                for(var i = 0; i < copyProf.length; i++) {
+                    totalSkill += copyProf[i];
+                    proftext += "<li class=\"list-group-item\">" + profs[i] + " :<span class=\"float-right font-weight-bold\">" + copyProf[i] + "</span></li>";
+                }
+                
+                $('#sumList').html(sltext);
+                $('#profList').html(proftext);
+                $('#itemList').html(items);
+                $('#otherList').html(other);
             });
         });
     </script>
@@ -391,5 +620,25 @@
         <thead><tr></tr></thead>
         <tbody></tbody>
     </table>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <ul id="sumList" class="list-group list-group-flush">
+                </ul>
+            </div>
+            <div class="col">
+                <ul id="profList" class="list-group list-group-flush">
+                </ul>
+            </div>
+            <div class="col">
+                <ul id="itemList" class="list-group list-group-flush">
+                </ul>
+            </div>
+            <div class="col">
+                <ul id="otherList" class="list-group list-group-flush">
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
