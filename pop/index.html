@@ -608,13 +608,30 @@
                 $('#profList').html(proftext);
                 $('#itemList').html(items);
                 $('#otherList').html(other);
+                
+                var link = $('#stage0').val();
+                for(var i = 1; i < stages.length; i++) {
+                    link += "_" + $('#stage' + i).val();
+                }
+                var baseurl = window.location.origin+window.location.pathname;
+                $('#buildLink').html("&nbsp;Link to the current build: <a href=\"" + baseurl + "#" + link + "\" class=\"alert-link\">" + baseurl +"#" + link + "</a>");
             });
+            
+            var linked = window.location.hash.substr(1).split('_');
+            if(linked != null && linked.length == stages.length) {
+                for(var i = 0; i < stages.length; i++) {
+                    $('#stage' + i).val(linked[i]);
+                }
+                $('#stage0').trigger('change');
+            }
         });
     </script>
 </head>
 <body>
     <p class="lead text-center">Mount & Blade: Warband Prophesy of Pendor (3.9) Character Creation Tool</p>
     <p class="lead text-center">Please create an issue on <a href="https://github.com/azakhi/azakhi.github.io" class="alert-link">Github page</a> if you find any problems</p>
+    
+    <p id="buildLink"></p>
     
     <table id="resTab" class="table table-bordered table-dark table-sm table-hover">
         <thead><tr></tr></thead>
