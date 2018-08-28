@@ -1,0 +1,51 @@
+Abyss Jewel
+Active Skill Gems
+Amulets
+Axe
+Belts
+Body Armours
+Boots
+Bows
+Claws
+Currency
+Daggers
+Divination Card
+Fishing Rods
+Flasks
+Gems
+Gloves
+Helmets
+Hybrid Flasks
+Incursion Item
+Jewel
+Labyrinth Item
+Labyrinth Map Item
+Labyrinth Trinket
+Large Relics
+Leaguestone
+Life Flasks
+Mace
+Mana Flasks
+Map Fragments
+Maps
+Misc Map Items
+One Hand Axes
+One Hand Maces
+One Hand Swords
+Pantheon Soul
+Piece
+Quest Items
+Quivers
+Rings
+Sceptres
+Shields
+Stackable Currency
+Staves
+Support Skill Gems
+Sword
+Thrusting One Hand Swords
+Two Hand Axes
+Two Hand Maces
+Two Hand Swords
+Utility Flasks
+Wands
