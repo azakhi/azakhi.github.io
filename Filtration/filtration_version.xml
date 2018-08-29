@@ -1,0 +1,16 @@
+<UpdateData>
+	<CurrentVersion>0.18</CurrentVersion>
+	<LatestVersionMajorPart>0</LatestVersionMajorPart>
+	<LatestVersionMinorPart>18</LatestVersionMinorPart>
+	<DownloadUrl>https://github.com/azakhi/Filtration/releases/tag/0.18</DownloadUrl>
+	<ReleaseDate>2018-08-29</ReleaseDate>
+	<StaticDataUpdatedDate>2018-08-29</StaticDataUpdatedDate>
+	<ReleaseNotes>Update for 3.2-3-4 and Improvements
+
+♦ Added missing and new block types (ElderMap, DisableDropSound, GemLevel, StackSize, HasExplicitMod, PlayEffect, MinimapIcon, CustomSound, MapTier)
+♦ Added section features
+♦ Added search feature to the sections tab
+♦ Added theme support to some existing and new block types
+♦ Improved parsing of sections/comments
+♦ Fixed some bugs</ReleaseNotes>
+</UpdateData>
