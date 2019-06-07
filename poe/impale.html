@@ -18,31 +18,15 @@
       let max = parseInt($('#max-impale').val()); 
       let simCount = parseInt($('#sim-count').val()); 
         
-      let output = "";  
-      let stackChances = [1]; 
-      let supStackChances = [1];  
-      for (let i = 0; i < max; i++) { 
-        stackChances.push(0); 
-        supStackChances.push(0);  
-      } 
+      let output = "";
       let accOrg = 0; 
       let accSup = 0; 
       for (let hit = 1; hit <= simCount; hit++) { 
         let org = 1;  
-        let sup = 1;  
-        for (let i = max; i > 0; i--) { 
-          let temp = stackChances[i-1] * chance;  
-          stackChances[i] += temp;  
-          stackChances[i-1] -= temp;  
-          stackChances[i] = stackChances[i] > 1 ? 1 : stackChances[i];  
-          temp = supStackChances[i-1] * supChance;  
-          supStackChances[i] += temp; 
-          supStackChances[i-1] -= temp; 
-          supStackChances[i] = supStackChances[i] > 1 ? 1 : supStackChances[i]; 
-          org += stackChances[i] * (i * effect / 10); 
-          sup += supStackChances[i] * (i * (effect + 0.59) / 10); 
-        } 
-        console.log(org); 
+        let sup = 1;
+        let count = hit > max ? max : hit - 1;
+        org += count * (chance * 0.1 * effect);
+        sup += count * (supChance * 0.1 * (effect + 0.59));
         sup *= 1.15;  
         accOrg += org;  
         accSup += sup;
@@ -83,7 +67,7 @@
       <label class="col-9 col-form-label">19% from Dread Banner, 20% from Swift Skewering node cluster, 10% from Forceful Skewering node cluster</label>
     </div>
     <div class="form-group row">
-      <label for="max-impale" class="col-2 col-form-label">Max impale</label>
+      <label for="max-impale" class="col-2 col-form-label">Max impale hits</label>
       <div class="col-1">
         <input class="form-control stat" type="number" value="5" id="max-impale">
       </div>
