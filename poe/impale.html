@@ -45,9 +45,11 @@
         console.log(org); 
         sup *= 1.15;  
         accOrg += org;  
-        accSup += sup;  
-        //output += "<tr><td>" + hit + "</td><td>" + parseFloat(org * 100 - 100).toFixed(2) + "</td><td>" + par seFloat(accOrg / hit * 100 - 100).toFixed(2) + "</td></tr>";
-        output += "<tr><td>" + hit + "</td><td>" + parseFloat(sup / org * 100 - 100).toFixed(2) + "</td><td>" +  parseFloat(accSup / accOrg * 100 - 100).toFixed(2) + "</td></tr>";
+        accSup += sup;
+        output += "<tr>";
+        output += "<td>" + hit + "</td><td>" + parseFloat(org * 100 - 100).toFixed(2) + "</td><td>" + parseFloat(accOrg / hit * 100 - 100).toFixed(2) + "</td>";
+        output += "<td>" + parseFloat(sup / org * 100 - 100).toFixed(2) + "</td><td>" +  parseFloat(accSup / accOrg * 100 - 100).toFixed(2) + "</td>";
+        output += "</tr>";
       }
       
       $('#resTab > tbody').html(output);
@@ -94,47 +96,19 @@
       </div>
       <label class="col-9 col-form-label"></label>
     </div>
+    <p>*Note that IS Effective Multiplier column is what you get from support gem with given investment, not support gem and investment combined.</p>
     <table id="resTab" class="table table-bordered table-dark table-sm table-hover">
       <thead>
         <tr>
           <td>Hit Count</td>
+          <td>Tree Effective Multiplier</td>
+          <td>Average Tree Effective Multiplier</td>
           <td>IS Effective Multiplier</td>
-          <td>Average Effective Multiplier</td>
+          <td>Average IS Effective Multiplier</td>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
-  <!--
-  <p class="lead text-center">Mount & Blade: Warband Prophesy of Pendor (3.9.1) Character Creation Tool</p>
-  <p class="lead text-center">Please create an issue on <a href="https://github.com/azakhi/azakhi.github.io" class="alert-link">Github page</a> if you find any problems</p>
-  
-  <p id="buildLink"></p>
-  
-  <table id="resTab" class="table table-bordered table-dark table-sm table-hover">
-    <thead><tr></tr></thead>
-    <tbody></tbody>
-  </table>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <ul id="sumList" class="list-group list-group-flush">
-        </ul>
-      </div>
-      <div class="col">
-        <ul id="profList" class="list-group list-group-flush">
-        </ul>
-      </div>
-      <div class="col">
-        <ul id="itemList" class="list-group list-group-flush">
-        </ul>
-      </div>
-      <div class="col">
-        <ul id="otherList" class="list-group list-group-flush">
-        </ul>
-      </div>
-    </div>
-  </div>
-  -->
 </body>
 </html>
