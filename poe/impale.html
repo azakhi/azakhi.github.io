@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impale Support Effective Multiplier</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style type="text/css">
+  
+  </style>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function calculateValues() {
+      let chance = parseInt($('#impale-chance').val()); 
+      chance = chance > 100 ? 1 : chance / 100; 
+      let supChance = (chance + 0.4) > 1 ? 1 : (chance + 0.4);  
+      let effect = parseInt($('#impale-effect').val()) / 100 + 1; 
+      let max = parseInt($('#max-impale').val()); 
+      let simCount = parseInt($('#sim-count').val()); 
+        
+      let output = "";  
+      let stackChances = [1]; 
+      let supStackChances = [1];  
+      for (let i = 0; i < max; i++) { 
+        stackChances.push(0); 
+        supStackChances.push(0);  
+      } 
+      let accOrg = 0; 
+      let accSup = 0; 
+      for (let hit = 1; hit <= simCount; hit++) { 
+        let org = 1;  
+        let sup = 1;  
+        for (let i = max; i > 0; i--) { 
+          let temp = stackChances[i-1] * chance;  
+          stackChances[i] += temp;  
+          stackChances[i-1] -= temp;  
+          stackChances[i] = stackChances[i] > 1 ? 1 : stackChances[i];  
+          temp = supStackChances[i-1] * supChance;  
+          supStackChances[i] += temp; 
+          supStackChances[i-1] -= temp; 
+          supStackChances[i] = supStackChances[i] > 1 ? 1 : supStackChances[i]; 
+          org += stackChances[i] * (i * effect / 10); 
+          sup += supStackChances[i] * (i * (effect + 0.59) / 10); 
+        } 
+        console.log(org); 
+        sup *= 1.15;  
+        accOrg += org;  
+        accSup += sup;  
+        //output += "<tr><td>" + hit + "</td><td>" + parseFloat(org * 100 - 100).toFixed(2) + "</td><td>" + par seFloat(accOrg / hit * 100 - 100).toFixed(2) + "</td></tr>";
+        output += "<tr><td>" + hit + "</td><td>" + parseFloat(sup / org * 100 - 100).toFixed(2) + "</td><td>" +  parseFloat(accSup / accOrg * 100 - 100).toFixed(2) + "</td></tr>";
+      }
+      
+      $('#resTab > tbody').html(output);
+    }
+  
+    $( document ).ready(function() {
+      // update values on change
+      $('.stat').on('change', function() {
+        calculateValues();
+      });
+      
+      calculateValues();
+    });
+  </script>
+</head>
+<body>
+  <p class="lead text-center">Change number as you wish to see how much more damage Impale Support will give in average for a number of hits</p>
+  <div class="container-fluid">
+    <div class="form-group row">
+      <label for="impale-chance" class="col-2 col-form-label">Chance to impale</label>
+      <div class="col-1">
+        <input class="form-control stat" type="number" value="70" id="impale-chance">
+      </div>
+      <label class="col-9 col-form-label">20% from Dread Banner, 30% from Swift Skewering node cluster, 20% from Forceful Skewering node cluster</label>
+    </div>
+    <div class="form-group row">
+      <label for="impale-effect" class="col-2 col-form-label">Impale effect</label>
+      <div class="col-1">
+        <input class="form-control stat" type="number" value="49" id="impale-effect">
+      </div>
+      <label class="col-9 col-form-label">19% from Dread Banner, 20% from Swift Skewering node cluster, 10% from Forceful Skewering node cluster</label>
+    </div>
+    <div class="form-group row">
+      <label for="max-impale" class="col-2 col-form-label">Max impale</label>
+      <div class="col-1">
+        <input class="form-control stat" type="number" value="5" id="max-impale">
+      </div>
+      <label class="col-9 col-form-label">Max is normally 5, Champion can get 2 more</label>
+    </div>
+    <div class="form-group row">
+      <label for="sim-count" class="col-2 col-form-label">Number of hits to simulate</label>
+      <div class="col-1">
+        <input class="form-control stat" type="number" value="50" id="sim-count">
+      </div>
+      <label class="col-9 col-form-label"></label>
+    </div>
+    <table id="resTab" class="table table-bordered table-dark table-sm table-hover">
+      <thead>
+        <tr>
+          <td>Hit Count</td>
+          <td>IS Effective Multiplier</td>
+          <td>Average Effective Multiplier</td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <!--
+  <p class="lead text-center">Mount & Blade: Warband Prophesy of Pendor (3.9.1) Character Creation Tool</p>
+  <p class="lead text-center">Please create an issue on <a href="https://github.com/azakhi/azakhi.github.io" class="alert-link">Github page</a> if you find any problems</p>
+  
+  <p id="buildLink"></p>
+  
+  <table id="resTab" class="table table-bordered table-dark table-sm table-hover">
+    <thead><tr></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <ul id="sumList" class="list-group list-group-flush">
+        </ul>
+      </div>
+      <div class="col">
+        <ul id="profList" class="list-group list-group-flush">
+        </ul>
+      </div>
+      <div class="col">
+        <ul id="itemList" class="list-group list-group-flush">
+        </ul>
+      </div>
+      <div class="col">
+        <ul id="otherList" class="list-group list-group-flush">
+        </ul>
+      </div>
+    </div>
+  </div>
+  -->
+</body>
+</html>
