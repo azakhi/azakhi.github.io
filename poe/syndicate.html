@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Syndicate</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <style type="text/css">
+    .container-fluid {
+      padding: 0 !important;
+    }
+    
+    #resTab {
+      margin-bottom: 0 !important;
+    }
+  
+    #resTab > tbody > tr > td {
+      box-sizing: border-box !important;
+      padding: 5px 7px !important;
+      text-align: center;
+      vertical-align: bottom;
+      min-width: 105px !important;
+    }
+    
+    .rew-title {
+      margin: 5px 0 !important;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .rew-tier {
+      font-size: 12px;
+      margin: 0 3px !important;
+      white-space: nowrap;
+    }
+    
+    .rew-btn {
+      font-size: 12px;
+      color: #ffffff !important;
+      padding: 0px;
+      text-decoration: underline;
+    }
+    
+    #resTab > thead > tr > th {
+      text-align: center;
+      font-size: 18px;
+    }
+    
+    #resTab > tbody > tr > th {
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      vertical-align: middle;
+      padding: 10px;
+    }
+    
+    .rew-very-valuable-bg {
+      background-color: #0ebb36;
+    }
+    
+    .rew-valuable-bg {
+      background-color: #206d32;
+    }
+    
+    .rew-invaluable-bg {
+      background-color: #921e29;
+    }
+    
+    .rew-very-valuable {
+      box-shadow: inset 0 0 25px 2px #00ff3a;
+    }
+    
+    .rew-valuable {
+      box-shadow: inset 0 0 15px 1px #28a745;
+    }
+    
+    .rew-invaluable {
+      box-shadow: inset 0 0 10px 1px #dc3545;
+    }
+    
+    .rew-img {
+      max-width: 60px !important;
+      max-height: 100px !important;
+      margin: 5px !important;
+    }
+    
+    .veiled-mod {
+      background-image: url(https://web.poecdn.com/image/item/veiled/suffix_06.png);
+      width: 85px;
+      height: 18px;
+      animation-duration: 3s;
+      animation-timing-function: steps(90, end);
+      animation-delay: 0s;
+      animation-iteration-count: infinite;
+      animation-direction: reverse;
+      animation-fill-mode: none;
+      animation-play-state: running;
+      animation-name: animate-veiled-mod;
+      will-change: background-position;
+      white-space: nowrap;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .above-image {
+      /*margin-top: -40px;
+      margin-bottom: 30px;
+      z-index: 9999;
+      position: relative;*/
+    }
+    
+    @keyframes animate-veiled-mod {
+      from {background-position: 0 0;}
+      to {background-position: 100% 0;}
+    }
+    
+    .mem-checks > label {
+      font-weight: bold;
+    }
+    
+    .mem-checks {
+      margin-left: 30px !important;
+    }
+  </style>
+  <script src="syndicate_data.js"></script>
+  <script type="text/javascript">
+    function fetchPrices() {
+      let prices = {};
+      $.get( "https://api.poe.watch/get?league=Legion&category=map", {})
+        .done(function( data ) {
+          for (let item of data) {
+            if (item.group === "scarab") {
+              prices[item.name] = item.mean;
+            }
+          }
+          
+          for (let key in scarabs) {
+            let scarab = scarabs[key];
+            if (!scarab || !scarab.text) {
+              continue;
+            }
+            
+            for (let tier of scarab.tiers) {
+              let value = Math.round(prices[tier.text + ' ' + scarab.text] * 100) / 100
+              tier.value = value;
+            }
+          }
+          
+          buildTable();
+        })
+        .fail(function( data ) {
+            console.log(data);
+        });
+    }
+    
+    function buildCheckboxes() {
+      for (let i = 0; i < synMembers.length; i++) {
+        let cb = '<div class="mem-checks form-check form-check-inline">';
+        cb += '<input class="form-check-input" type="checkbox" id="memCheckbox' + i + '" checked>';
+        cb += '<label class="form-check-label" for="memCheckbox' + i + '">' + synMembers[i].name + '</label>';
+        cb += '</div>';
+        $('#memChecks').append(cb);
+      }
+      
+      $('.mem-checks > input').on('change', function() {
+        buildTable();
+      });
+    }
+    
+    function buildTable() {
+      $('#resTab > thead > tr > th').remove();
+      $('#resTab > thead > tr').append('<th>#</th>');
+      $('#resTab > tbody > tr > td').remove();
+      let valueStyleAdd = '-bg';
+    
+      let rewardMapping = ["transportation", "fortification", "research", "intervention"];
+      let rankCount = 3;
+      for (let m_i = 0; m_i < synMembers.length; m_i++) {
+        if ($('#memCheckbox' + m_i + ':checked').length <= 0) {
+          continue;
+        }
+      
+        let mem = synMembers[m_i];
+        let imgText = '<img src="' + mem.img + '" class="img-fluid">';
+        $('#resTab > thead > tr').append('<th>' + imgText + mem.name + '</th>');
+        
+        for (let i = 0; i < rewardMapping.length; i++) {
+          let reward = mem.rewards[rewardMapping[i]];
+          let maxValue = -1;
+          let cellText = reward.img + '<p class="rew-title">' + reward.text + '</p>';
+          cellText += '<button class="btn btn-link rew-btn" type="button" data-toggle="collapse" data-target="#tiers' + m_i + '' + i + '" aria-expanded="false" aria-controls="#tiers' + m_i + '' + i + '">Tiers</button>';
+          cellText += '<div class="collapse" id="tiers' + m_i + '' + i + '">';
+          for (let j = 0; j < reward.tiers.length; j++) {
+            let value = reward.tiers[j].value;
+            if (value > maxValue) {
+              maxValue = value;
+            }
+            
+            cellText += '<p class="rew-tier">' + reward.tiers[j].text + (value > 0 ? ' (' + value + ')' : '') + '</p>';
+          }
+          cellText += '</div>';
+            
+          let cellClass = '';
+          if (maxValue >= 40) {
+            cellClass = 'class="rew-very-valuable' + valueStyleAdd + '"';
+          }
+          else if (maxValue >= 15) {
+            cellClass = 'class="rew-valuable' + valueStyleAdd + '"';
+          }
+          else if (maxValue < 5 && maxValue >= 0) {
+            cellClass = 'class="rew-invaluable' + valueStyleAdd + '"';
+          }
+            
+          $('#resTab > tbody > tr:nth-child(' + (i + 1) + ')')
+            .append('<td ' + cellClass + '>' + cellText + '</td>');
+        }
+      }
+    }
+  
+    $( document ).ready(function() {
+      buildCheckboxes();
+      fetchPrices();
+      buildTable();
+    });
+  </script>
+</head>
+<body>
+  <div class="container-fluid">
+    <div id="memChecks"></div>
+    
+    <table id="resTab" class="table table-bordered table-dark table-sm">
+      <thead>
+        <tr>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>T</th>
+        </tr>
+        <tr>
+          <th>F</th>
+        </tr>
+        <tr>
+          <th>R</th>
+        </tr>
+        <tr>
+          <th>I</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
