@@ -31,7 +31,9 @@
         accOrg += org;  
         accSup += sup;
         output += "<tr>";
-        output += "<td>" + hit + "</td><td>" + parseFloat(org * 100 - 100).toFixed(2) + "</td><td>" + parseFloat(accOrg / hit * 100 - 100).toFixed(2) + "</td>";
+        output += "<td>" + hit + "</td>";
+        output += "<td>" + parseFloat(sup * 100 - 100).toFixed(2) + "</td>";
+        output += "<td>" + parseFloat(org * 100 - 100).toFixed(2) + "</td><td>" + parseFloat(accOrg / hit * 100 - 100).toFixed(2) + "</td>";
         output += "<td>" + parseFloat(sup / org * 100 - 100).toFixed(2) + "</td><td>" +  parseFloat(accSup / accOrg * 100 - 100).toFixed(2) + "</td>";
         output += "</tr>";
       }
@@ -85,6 +87,7 @@
       <thead>
         <tr>
           <td>Hit Count</td>
+          <td>Final Multiplier</td>
           <td>Tree Effective Multiplier</td>
           <td>Average Tree Effective Multiplier</td>
           <td>IS Effective Multiplier</td>
