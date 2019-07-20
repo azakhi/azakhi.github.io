@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delve Biomes</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <style type="text/css">
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  
+    .biome {
+      width: 33.33333%;
+      height: 400px;
+      float: left;
+    }
+  
+    .biome h1 {
+      color: #ffffff;
+      text-align: center;
+    }
+    
+    .fossils {
+      background-color: rgba(0, 0, 0, 0.6);
+      margin-left: 50px;
+      display: inline-block;
+      padding: 10px 20px 5px 10px;
+    }
+    
+    .fossil {
+      margin: 0;
+      display:table;
+    }
+    
+    .fossil > img {
+      margin-right: 10px;
+    }
+    
+    .fossil:nth-child(even) > img {
+      margin-left: 40px;
+    }
+    
+    .fossil > span {
+      font-size: 20px;
+      font-weight: bold;
+      display: table-cell;
+      vertical-align: middle;
+    }
+    
+    .fossil-name {
+      color: #ffffff;
+    }
+    
+    .fossil-price {
+      color: #ffffff;
+      padding-left: 20px;
+    }
+    
+    .very-valuable {
+      color: #00ff3b;
+    }
+    
+    .valuable {
+      color: #028e23;
+    }
+    
+    .invaluable {
+      color: #921e29;
+    }
+    
+    .abyssal-depths {
+      background-image: url(assets/abyssal_depths.png);
+    }
+    
+    .frozen-hollow {
+      background-image: url(assets/frozen_hollow.png);
+    }
+    
+    .fungal-caverns {
+      background-image: url(assets/fungal_caverns.png);
+    }
+    
+    .magma-fissure {
+      background-image: url(assets/magma_fissure.png);
+    }
+    
+    .petrified-forest {
+      background-image: url(assets/petrified_forest.png);
+    }
+    
+    .sulphur-vents {
+      background-image: url(assets/sulphur_vents.png);
+    }
+  </style>
+  <script src="syndicate_data.js"></script>
+  <script type="text/javascript">
+    let nameBiomeMapping = {
+      'Aberrant Fossil': ['abyssal-depths', 'fungal-caverns'],
+      'Aetheric Fossil': ['sulphur-vents'],
+      'Bound Fossil': ['abyssal-depths', 'petrified-forest'],
+      'Corroded Fossil': ['fungal-caverns', 'petrified-forest'],
+      'Dense Fossil': ['fungal-caverns', 'petrified-forest'],
+      'Enchanted Fossil': ['magma-fissure'],
+      'Encrusted Fossil': ['magma-fissure'],
+      'Frigid Fossil': ['frozen-hollow'],
+      'Gilded Fossil': ['fungal-caverns'],
+      'Jagged Fossil': ['petrified-forest'],
+      'Lucent Fossil': ['abyssal-depths'],
+      'Metallic Fossil': ['sulphur-vents'],
+      'Perfect Fossil': ['fungal-caverns', 'sulphur-vents'],
+      'Prismatic Fossil': ['frozen-hollow', 'magma-fissure'],
+      'Pristine Fossil': ['frozen-hollow', 'magma-fissure'],
+      'Sanctified Fossil': ['frozen-hollow', 'petrified-forest'],
+      'Scorched Fossil': ['magma-fissure'],
+      'Serrated Fossil': ['frozen-hollow'],
+      'Shuddering Fossil': ['frozen-hollow'],
+    };
+  
+    function fetchPrices() {
+      let biomes = {};
+      $.get( "https://api.poe.watch/get?league=Legion&category=currency", {})
+        .done(function( data ) {
+          for (let item of data) {
+            if (item.group === "fossil" && nameBiomeMapping[item.name]) {
+              let mappedBiomes = nameBiomeMapping[item.name];
+              for (let biome of mappedBiomes) {
+                if (!Array.isArray(biomes[biome])) {
+                  biomes[biome] = [];
+                }
+                
+                biomes[biome].push({
+                  name: item.name,
+                  price: Math.round(item.mean * 100) / 100,
+                  icon: item.icon,
+                });
+              }
+            }
+          }
+          
+          for (let biome in biomes) {
+            biomes[biome].sort((a,b) => (a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0));
+            
+            for (let fossil of biomes[biome]) {
+              let valueClass = '';
+              if (fossil.price >= 15) {
+                valueClass = 'very-valuable';
+              }
+              else if (fossil.price >= 5) {
+                valueClass = 'valuable';
+              }
+              else if (fossil.price <= 1) {
+                valueClass = 'invaluable';
+              }
+            
+              let fossilDiv = '<div class="fossil">'
+              fossilDiv += '<img src="' + fossil.icon + '">';
+              fossilDiv += '<span class="fossil-name">' + fossil.name + '</span>';
+              fossilDiv += '<span class="fossil-price ' + valueClass + '">' + fossil.price + '</span>';
+              fossilDiv += '</div>';
+              $('.' + biome + ' .fossils').append(fossilDiv);
+            }
+          }
+          console.log(biomes);
+        })
+        .fail(function( data ) {
+            console.log(data);
+        });
+    }
+  
+    $( document ).ready(function() {
+      $('.biome').height($( window ).height() / 2);
+      fetchPrices();
+    });
+  </script>
+</head>
+<body>
+  <div class="biome abyssal-depths">
+    <h1>Abyssal Depths</h1>
+    <div class="fossils"></div>
+  </div>
+  <div class="biome frozen-hollow">
+    <h1>Frozen Hollow</h1>
+    <div class="fossils"></div>
+  </div>
+  <div class="biome fungal-caverns">
+    <h1>Fungal Caverns</h1>
+    <div class="fossils"></div>
+  </div>
+  <div class="biome magma-fissure">
+    <h1>Magma Fissure</h1>
+    <div class="fossils"></div>
+  </div>
+  <div class="biome petrified-forest">
+    <h1>Petrified Forest</h1>
+    <div class="fossils"></div>
+  </div>
+  <div class="biome sulphur-vents">
+    <h1>Sulphur Vents</h1>
+    <div class="fossils"></div>
+  </div>
+</body>
+</html>
