@@ -26,9 +26,25 @@
             var profs = ["One Handed Weapons", "Two Handed Weapons", "Polearms", "Archery", "Crossbows", "Throwing"];
             var notes = ["Empire Relation", "Fierdsvain Relation", "Sarleon Relation", "Ravenstern relation", "D'Shar Relation", "Inquisition Relation", "Griffon Relation", "Lion Relation", "Renegade Knights Relation", "Adventurer Companies Relation", "Snake Cult Relation", "D'Shar Raiders Relation", "Singalians Relation", "King Ulric Relation", "Kadan Bahadur Khan Relation"];
             var base = {
-                attrs: [6, 5, 4, 5],
-                skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0],
-                profs: [15, 15, 15, 15, 15, 15],
+                attrs: {
+                    "Strength" : 6,
+                    "Agility" : 5,
+                    "Intelligence" : 4,
+                    "Charisma" : 5,
+                },
+                skills: {
+                    "Riding" : 1,
+                    "Prisoner Management" : 2,
+                    "Leadership" : 1,
+                },
+                profs: {
+                    "One Handed Weapons" : 15,
+                    "Two Handed Weapons" : 15,
+                    "Polearms" : 15,
+                    "Archery" : 15,
+                    "Crossbows" : 15,
+                    "Throwing" : 15,
+                },
                 gold: 300,
                 rumor: 7
             };
@@ -37,14 +53,20 @@
                     {
                         text: "Male",
                         depends: -1,
-                        attrs: [1, 0, 0, 2],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        attrs: {
+                            "Strength" : 1,
+                            "Charisma" : 2,
+                        },
+                        skills: {}
                     },
                     {
                         text: "Female",
                         depends: -1,
-                        attrs: [0, 2, 1, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        attrs: {
+                            "Agility" : 2,
+                            "Intelligence" : 1,
+                        },
+                        skills: {}
                     }
                 ],
                 [
@@ -52,16 +74,45 @@
                         text: "A minor noble",
                         depends: 0,
                         attrs: [
-                            [1, 0, 2, 2],
-                            [0, 0, 2, 3]
+                            {
+                                "Strength" : 1,
+                                "Intelligence" : 2,
+                                "Charisma" : 2,
+                            },
+                            {
+                                "Intelligence" : 2,
+                                "Charisma" : 3,
+                            },
                         ],
                         skills: [
-                            [0, 2, 0, 0, 1, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
-                            [0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 2, 0, 2, 0]
+                            {
+                                "Power Strike" : 2,
+                                "Weapon Master" : 1,
+                                "Shield" : 2,
+                                "Riding" : 2,
+                                "Tactics" : 2,
+                                "Leadership" : 3,
+                            },
+                            {
+                                "Power Strike" : 1,
+                                "Riding" : 2,
+                                "Wound Treatment" : 1,
+                                "First Aid" : 2,
+                                "Persuasion" : 2,
+                                "Leadership" : 2,
+                                "Power Draw" : 1,
+                                "Tactics" : 1,
+                            },
                         ],
                         profs: [
-                            [40, 40, 40, 0, 0, 0],
-                            [40, 0, 0, 0, 0, 0]
+                            {
+                                "One Handed Weapons" : 40,
+                                "Two Handed Weapons" : 40,
+                                "Polearms" : 40,
+                            },
+                            {
+                                "One Handed Weapons" : 40,
+                            },
                         ],
                         gold: [300, 300],
                         honor: [1, 0],
@@ -75,9 +126,22 @@
                     {
                         text: "A merchant ship captain",
                         depends: -1,
-                        attrs: [0, 0, 2, 4],
-                        skills: [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 1, 0, 0, 3],
-                        profs: [0, 20, 0, 0, 0, 0],
+                        attrs: {
+                            "Intelligence" : 2,
+                            "Charisma" : 4,
+                        },
+                        skills: {
+                            "Power Strike" : 1,
+                            "Riding" : 1,
+                            "Looting" : 1,
+                            "Path-finding" : 2,
+                            "Inventory Management" : 3,
+                            "Persuasion" : 1,
+                            "Trade" : 3,
+                        },
+                        profs: {
+                            "Two Handed Weapons" : 20,
+                        },
                         gold: 3000,
                         renown: 20,
                         items: ["Tabard", "Pottery x2"],
@@ -86,9 +150,26 @@
                     {
                         text: "A former knight",
                         depends: -1,
-                        attrs: [3, 2, 0, 1],
-                        skills: [1, 2, 0, 0, 1, 1, 1, 2, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        profs: [60, 65, 60, 0, 0, 0],
+                        attrs: {
+                            "Strength" : 3,
+                            "Agility" : 2,
+                            "Charisma" : 1,
+                        },
+                        skills: {
+                            "Ironflesh" : 1,
+                            "Power Strike" : 2,
+                            "Weapon Master" : 1,
+                            "Shield" : 1,
+                            "Athletics" : 1,
+                            "Riding" : 2,
+                            "Trainer" : 3,
+                            "Tactics" : 1,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 60,
+                            "Two Handed Weapons" : 65,
+                            "Polearms" : 60,
+                        },
                         gold: 350,
                         renown: 10,
                         items: ["White and Green Long Surcoat"],
@@ -96,11 +177,30 @@
                         other: ["A) randomly select Dragons or Eventide, then -5 to the current relation, B) repeat A one more time"]
                     },
                     {
-                        text: "A retired noble adventurer",
+                        text: "A retired adventurer",
                         depends: -1,
-                        attrs: [2, 2, 2, 0],
-                        skills: [0, 2, 0, 1, 1, 0, 1, 2, 0, 2, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        profs: [40, 30, 30, 40, 0, 0],
+                        attrs: {
+                            "Strength" : 2,
+                            "Agility" : 2,
+                            "Intelligence" : 2,
+                        },
+                        skills: {
+                            "Power Strike" : 2,
+                            "Power Draw" : 1,
+                            "Weapon Master" : 1,
+                            "Athletics" : 1,
+                            "Riding" : 2,
+                            "Looting" : 2,
+                            "Tracking" : 1,
+                            "Path-finding" : 1,
+                            "Spotting" : 1,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 40,
+                            "Two Handed Weapons" : 30,
+                            "Polearms" : 30,
+                            "Archery" : 40,
+                        },
                         gold: 350,
                         items: ["Mail with Surcoat", "Singalian Arrows"]
                     },
@@ -108,18 +208,53 @@
                         text: "A wandering nomad clan leader",
                         depends: 0,
                         attrs: [
-                            [3, 2, 1, 0],
-                            [1, 2, 2, 1]
+                            {
+                                "Strength" : 3,
+                                "Agility" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 1,
+                                "Agility" : 2,
+                                "Intelligence" : 2,
+                                "Charisma" : 1,
+                            },
                         ],
                         skills: [
-                            [0, 0, 0, 2, 0, 0, 1, 2, 2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 1, 3, 1, 1, 0, 1, 0, 3, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0]
+                            {
+                                "Power Draw" : 2,
+                                "Athletics" : 1,
+                                "Riding" : 2,
+                                "Horse Archery" : 2,
+                                "Path-finding" : 2,
+                                "Spotting" : 2,
+                                "First Aid" : 1,
+                            },
+                            {
+                                "Athletics" : 1,
+                                "Riding" : 3,
+                                "Horse Archery" : 1,
+                                "Looting" : 1,
+                                "Tracking" : 1,
+                                "Path-finding" : 3,
+                                "Wound Treatment" : 1,
+                                "First Aid" : 1,
+                            },
                         ],
                         profs: [
-                            [20, 0, 10, 50, 0, 10],
-                            [5, 0, 0, 30, 0, 15]
+                            {
+                                "One Handed Weapons" : 20,
+                                "Polearms" : 10,
+                                "Archery" : 50,
+                                "Throwing" : 10,
+                            },
+                            {
+                                "One Handed Weapons" : 5,
+                                "Archery" : 30,
+                                "Throwing" : 15,
+                            },
                         ],
-                        gold: [350, 150],
+                        gold: [150, 120],
                         renown: [10, 0],
                         items: [["D'Shar Mail Shirt"], ["D'Shar Courser"]],
                         notes: [
@@ -130,17 +265,53 @@
                     {
                         text: "A rough and mysterious figure",
                         depends: -1,
-                        attrs: [0, 4, 2, 0],
-                        skills: [0, 0, 3, 0, 0, 0, 2, 0, 0, 3, 0, 1, 2, 0, 2, 1, 0, 0, 1, 0, 1, 1, 0, 2],
-                        profs: [30, 0, 0, 0, 50, 50],
+                        attrs: {
+                            "Agility" : 4,
+                            "Intelligence" : 2,
+                        },
+                        skills: {
+                            "Power Throw" : 3,
+                            "Athletics" : 2,
+                            "Looting" : 3,
+                            "Tactics" : 2,
+                            "Spotting" : 2,
+                            "Persuasion" : 1,
+                            "Inventory Management" : 1,
+                            "First Aid" : 1,
+                            "Prisoner Management" : 1,
+                            "Trade" : 2,
+                            "Tracking" : 1,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 30,
+                            "Crossbows" : 50,
+                            "Throwing" : 50,
+                        },
                         gold: 25
                     },
                     {
                         text: "A respectable physician",
                         depends: -1,
-                        attrs: [1, 2, 3, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 1, 3, 3, 3, 0, 0, 1, 1, 2],
-                        profs: [10, 0, 0, 0, 20, 0],
+                        attrs: {
+                            "Strength" : 1,
+                            "Agility" : 2,
+                            "Intelligence" : 3,
+                        },
+                        skills: {
+                            "Riding" : 1,
+                            "Path-finding" : 2,
+                            "Inventory Management" : 1,
+                            "Wound Treatment" : 3,
+                            "Surgery" : 3,
+                            "First Aid" : 3,
+                            "Prisoner Management" : 1,
+                            "Leadership" : 1,
+                            "Trade" : 2,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 10,
+                            "Crossbows" : 20,
+                        },
                         gold: 1010,
                         renown: 30,
                         items: ["The complete Manual of Herbal Remedies of Pendor (Book)"]
@@ -150,43 +321,94 @@
                     {
                         text: "Arranged for you to serve a minor Barclay Noble",
                         depends: -1,
-                        attrs: [1, 0, 1, 2],
-                        skills: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0],
-                        profs: [25, 0, 5, 0, 0, 0],
+                        attrs: {
+                            "Strength" : 1,
+                            "Intelligence" : 1,
+                            "Charisma" : 2,
+                        },
+                        skills: {
+                            "Power Strike" : 1,
+                            "Persuasion" : 2,
+                            "Leadership" : 1,
+                            "Trainer" : 1,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 25,
+                            "Polearms" : 5,
+                        },
                         renown: 15
                     },
                     {
                         text: "Sent you to be an apprentice to the local guild craftsman",
                         depends: -1,
-                        attrs: [1, 0, 2, 1],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 1],
-                        profs: [0, 0, 0, 0, 30, 0],
+                        attrs: {
+                            "Strength" : 1,
+                            "Intelligence" : 2,
+                            "Charisma" : 1,
+                        },
+                        skills: {
+                            "Inventory Management" : 2,
+                            "Engineer" : 2,
+                            "Trade" : 1,
+                        },
+                        profs: {
+                            "Crossbows" : 30,
+                        },
                         gold: 600,
-                        renown: 30,
                         items: ["Steel Bolts"]
                     },
                     {
                         text: "Put you in the care of a successful merchant",
                         depends: -1,
-                        attrs: [0, 0, 3, 1],
-                        skills: [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1],
-                        profs: [0, 0, 0, 0, 0, 0],
+                        attrs: {
+                            "Intelligence" : 3,
+                            "Charisma" : 1,
+                        },
+                        skills: {
+                            "Looting" : 1,
+                            "Inventory Management" : 2,
+                            "Trade" : 1,
+                            "Athletics" : 1,
+                        },
+                        profs: {},
                         gold: 1500
                     },
                     {
                         text: "Left you to fend for yourself",
                         depends: -1,
-                        attrs: [0, 2, 2, 0],
-                        skills: [1, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        profs: [25, 0, 0, 0, 25, 15],
+                        attrs: {
+                            "Agility" : 2,
+                            "Intelligence" : 2,
+                        },
+                        skills: {
+                            "Athletics" : 1,
+                            "Looting" : 2,
+                            "Spotting" : 1,
+                            "Ironflesh" : 1,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 25,
+                            "Crossbows" : 25,
+                            "Throwing" : 15,
+                        },
                         rumor: 4
                     },
                     {
                         text: "Sent you out on your own to hunt in the wilds",
                         depends: -1,
-                        attrs: [2, 2, 0, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        profs: [0, 0, 0, 35, 0, 0],
+                        attrs: {
+                            "Strength" : 2,
+                            "Agility" : 2,
+                        },
+                        skills: {
+                            "Horse Archery" : 2,
+                            "Tracking" : 1,
+                            "Path-finding" : 1,
+                            "Spotting" : 1,
+                        },
+                        profs: {
+                            "Archery" : 35,
+                        },
                         gold: 100,
                         renown: 5,
                         items: ["Dark Steppe Horse"]
@@ -197,47 +419,106 @@
                         text: "A squire/A lady-in-waiting",
                         depends: 0,
                         attrs: [
-                            [1, 1, 0, 0],
-                            [0, 0, 1, 1]
+                            {
+                                "Strength" : 1,
+                                "Agility" : 1,
+                            },
+                            {
+                                "Intelligence" : 1,
+                                "Charisma" : 1,
+                            },
                         ],
                         skills: [
-                            [0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 2, 0]
+                            {
+                                "Power Strike" : 2,
+                                "Weapon Master" : 1,
+                                "Shield" : 2,
+                                "Riding" : 1,
+                                "Trainer" : 1,
+                                "Leadership" : 1,
+                            },
+                            {
+                                "Riding" : 2,
+                                "Tactics" : 1,
+                                "Wound Treatment" : 1,
+                                "Persuasion" : 2,
+                                "Leadership" : 2,
+                            },
                         ],
                         profs: [
-                            [30, 30, 30, 10, 30, 10],
-                            [10, 0, 0, 35, 0, 0]
+                            {
+                                "One Handed Weapons" : 30,
+                                "Two Handed Weapons" : 30,
+                                "Polearms" : 30,
+                                "Archery" : 10,
+                                "Crossbows" : 30,
+                                "Throwing" : 10,
+                            },
+                            {
+                                "One Handed Weapons" : 10,
+                                "Crossbows" : 35,
+                            },
                         ],
                         gold: [100, 100],
-                        renown: [10, 0],
                         items: [["Red Surcoat on Fine Mail"], ["Spirited Courser"]]
                     },
                     {
                         text: "A bard",
                         depends: -1,
-                        attrs: [0, 0, 0, 2],
-                        skills: [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0],
-                        profs: [25, 0, 0, 0, 30, 0],
+                        attrs: {
+                            "Charisma" : 2,
+                        },
+                        skills: {
+                            "Weapon Master" : 1,
+                            "Looting" : 1,
+                            "Path-finding" : 2,
+                            "Persuasion" : 2,
+                            "Leadership" : 2,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 25,
+                            "Crossbows" : 30,
+                        },
                         gold: 200,
-                        renown: 30,
                         items: ["Lute"],
                         rumor: 4
                     },
                     {
                         text: "A scholar at a local Barclay university",
                         depends: -1,
-                        attrs: [0, 0, 2, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0],
-                        profs: [20, 0, 0, 0, 20, 0],
+                        attrs: {
+                            "Intelligence" : 2,
+                        },
+                        skills: {
+                            "Wound Treatment" : 2,
+                            "Surgery" : 2,
+                            "First Aid" : 2,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 20,
+                            "Crossbows" : 20,
+                        },
                         gold: 700,
                         items: ["Random Book"]
                     },
                     {
                         text: "A self employed merchant",
                         depends: -1,
-                        attrs: [0, 0, 1, 1],
-                        skills: [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 0, 2],
-                        profs: [15, 0, 0, 0, 0, 0],
+                        attrs: {
+                            "Intelligence" : 1,
+                            "Charisma" : 1,
+                        },
+                        skills: {
+                            "Riding" : 1,
+                            "Looting" : 1,
+                            "Path-finding" : 1,
+                            "Inventory Management" : 2,
+                            "Persuasion" : 1,
+                            "Trade" : 2,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 15,
+                        },
                         gold: 1200,
                         items: ["Winged Mace"],
                         rumor: 5
@@ -245,17 +526,39 @@
                     {
                         text: "An engineer and builder",
                         depends: -1,
-                        attrs: [1, 0, 1, 0],
-                        skills: [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 0],
-                        profs: [15, 0, 0, 0, 0, 0],
+                        attrs: {
+                            "Strength" : 1,
+                            "Intelligence" : 1,
+                        },
+                        skills: {
+                            "Tactics" : 2,
+                            "Inventory Management" : 2,
+                            "Engineer" : 3,
+                            "Athletics" : 1,
+                        },
+                        profs: {
+                            "One Handed Weapons" : 15,
+                        },
                         gold: 700
                     },
                     {
                         text: "A tracker and hunter",
                         depends: -1,
-                        attrs: [1, 1, 0, 0],
-                        skills: [0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        profs: [0, 0, 20, 35, 0, 0],
+                        attrs: {
+                            "Strength" : 1,
+                            "Agility" : 1,
+                        },
+                        skills: {
+                            "Power Draw" : 2,
+                            "Athletics" : 2,
+                            "Riding" : 1,
+                            "Tracking" : 1,
+                            "Spotting" : 2,
+                        },
+                        profs: {
+                            "Polearms" : 20,
+                            "Archery" : 35,
+                        },
                         gold: 200,
                         items: ["Short Composite Bow", "Furs X2"],
                         rumor: 6
@@ -266,28 +569,91 @@
                         text: "You must right a wrong done to you",
                         depends: 3,
                         attrs: [
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0]
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
                         ],
                         skills: [
-                            [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            {
+                                "Power Strike" : 1,
+                                "Athletics" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 1,
+                                "Spotting" : 1,
+                            },
+                            {
+                                "Power Strike" : 1,
+                                "Athletics" : 1,
+                                "Tactics" : 2,
+                                "Path-finding" : 1,
+                                "Spotting" : 1,
+                            },
+                            {
+                                "Power Strike" : 1,
+                                "Athletics" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 1,
+                                "Spotting" : 2,
+                            },
+                            {
+                                "Ironflesh" : 1,
+                                "Power Strike" : 1,
+                                "Athletics" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 1,
+                                "Spotting" : 1,
+                            },
+                            {
+                                "Power Strike" : 1,
+                                "Athletics" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 1,
+                                "Spotting" : 1,
+                            },
+                            {
+                                "Power Strike" : 1,
+                                "Athletics" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 1,
+                                "Spotting" : 1,
+                            },
                         ],
                         profs: [
-                            [20, 0, 0, 0, 0, 0],
-                            [10, 0, 0, 0, 20, 0],
-                            [0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0],
-                            [10, 0, 0, 20, 0, 0]
+                            {
+                                "One Handed Weapons" : 20,
+                            },
+                            {
+                                "One Handed Weapons" : 10,
+                                "Crossbows" : 20,
+                            },
+                            {},
+                            {},
+                            {},
+                            {
+                                "One Handed Weapons" : 10,
+                                "Archery" : 20,
+                            },
                         ],
                         gold: [100, 0, 0, 200, 100, 0]
                     },
@@ -295,22 +661,71 @@
                         text: "You received a message that your father has died",
                         depends: 1,
                         attrs: [
-                            [0, 1, 0, 2],
-                            [0, 1, 0, 2],
-                            [0, 1, 0, 2],
-                            [0, 1, 0, 2],
-                            [0, 1, 0, 2],
-                            [0, 1, 0, 2],
-                            [0, 1, 0, 2]
+                            {
+                                "Agility" : 1,
+                                "Charisma" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Charisma" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Charisma" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Charisma" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Charisma" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Charisma" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Charisma" : 2,
+                            },
                         ],
                         skills: [
-                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
-                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
-                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
-                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
-                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
-                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0],
-                            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0]
+                            {
+                                "Ironflesh" : 1,
+                                "Spotting" : 2,
+                                "First Aid" : 2,
+                            },
+                            {
+                                "Ironflesh" : 1,
+                                "Spotting" : 2,
+                                "First Aid" : 2,
+                            },
+                            {
+                                "Ironflesh" : 1,
+                                "Spotting" : 2,
+                                "First Aid" : 2,
+                            },
+                            {
+                                "Ironflesh" : 1,
+                                "Spotting" : 2,
+                                "First Aid" : 2,
+                            },
+                            {
+                                "Ironflesh" : 1,
+                                "Spotting" : 2,
+                                "First Aid" : 2,
+                            },
+                            {
+                                "Ironflesh" : 1,
+                                "Spotting" : 2,
+                                "First Aid" : 2,
+                            },
+                            {
+                                "Ironflesh" : 1,
+                                "Spotting" : 2,
+                                "First Aid" : 2,
+                            },
                         ],
                         gold: [0, 1000, 0, 0, 0, 100, 0],
                         items: [["Crude Coat of Plates - Yellow"], [], ["Sarleon Knight Longsword"], ["Barclay Plate and Chain"], ["D'Shar Bow", "Scimitar"], ["Assassin Throwing Knives"], ["The Field Surgeon's Handbook (Book)"]]
@@ -319,41 +734,144 @@
                         text: "A series of unfortunate events",
                         depends: 3,
                         attrs: [
-                            [0, 3, 0, 0],
-                            [0, 3, 0, 0],
-                            [0, 3, 0, 0],
-                            [0, 3, 0, 0],
-                            [0, 3, 0, 0],
-                            [0, 3, 0, 0]
+                            {
+                                "Agility" : 3,
+                            },
+                            {
+                                "Agility" : 3,
+                            },
+                            {
+                                "Agility" : 3,
+                            },
+                            {
+                                "Agility" : 3,
+                            },
+                            {
+                                "Agility" : 3,
+                            },
+                            {
+                                "Agility" : 3,
+                            },
                         ],
                         skills: [
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0]
+                            {
+                                "Riding" : 1,
+                                "Tactics" : 3,
+                                "Path-finding" : 2,
+                                "Spotting" : 1,
+                            },
+                            {
+                                "Riding" : 1,
+                                "Looting" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 2,
+                                "Spotting" : 1,
+                                "Persuasion" : 1,
+                            },
+                            {
+                                "Riding" : 1,
+                                "Tactics" : 3,
+                                "Path-finding" : 2,
+                                "Spotting" : 1,
+                            },
+                            {
+                                "Riding" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 2,
+                                "Spotting" : 1,
+                                "Trade" : 1,
+                                "Prisoner Management" : 1,
+                            },
+                            {
+                                "Riding" : 1,
+                                "Tactics" : 1,
+                                "Path-finding" : 2,
+                                "Spotting" : 1,
+                                "Engineer" : 2,
+                            },
+                            {
+                                "Riding" : 2,
+                                "Tactics" : 1,
+                                "Path-finding" : 3,
+                                "Spotting" : 1,
+                            },
                         ],
-                        gold: [1000, 0, 100, 0, 100, 0]
+                        gold: [100, 0, 100, 0, 100, 0]
                     },
                     {
                         text: "Too many enemies that seek to end your life",
                         depends: 3,
                         attrs: [
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0],
-                            [2, 0, 1, 0]
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
+                            {
+                                "Strength" : 2,
+                                "Intelligence" : 1,
+                            },
                         ],
                         skills: [
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1]
+                            {
+                                "Weapon Master" : 1,
+                                "Looting" : 1,
+                                "Tactics" : 1,
+                                "Persuasion" : 1,
+                                "Trade" : 1,
+                            },
+                            {
+                                "Weapon Master" : 1,
+                                "Looting" : 1,
+                                "Tactics" : 1,
+                                "Persuasion" : 1,
+                                "Trade" : 1,
+                            },
+                            {
+                                "Weapon Master" : 1,
+                                "Looting" : 1,
+                                "Tactics" : 1,
+                                "Surgery" : 1,
+                                "Persuasion" : 1,
+                                "Trade" : 1,
+                            },
+                            {
+                                "Weapon Master" : 1,
+                                "Looting" : 1,
+                                "Tactics" : 2,
+                                "Persuasion" : 1,
+                                "Trade" : 1,
+                            },
+                            {
+                                "Weapon Master" : 1,
+                                "Looting" : 1,
+                                "Tactics" : 1,
+                                "Persuasion" : 2,
+                                "Trade" : 1,
+                            },
+                            {
+                                "Weapon Master" : 1,
+                                "Looting" : 1,
+                                "Tactics" : 1,
+                                "Persuasion" : 1,
+                                "Prisoner Management" : 1,
+                                "Trade" : 1,
+                            },
                         ],
                         gold: [0, 0, 0, 0, 100, 0]
                     },
@@ -361,22 +879,57 @@
                         text: "A letter that changed your life forever",
                         depends: 1,
                         attrs: [
-                            [0, 1, 2, 0],
-                            [0, 1, 2, 0],
-                            [0, 1, 2, 0],
-                            [0, 1, 2, 0],
-                            [0, 1, 2, 0],
-                            [0, 1, 2, 0],
-                            [0, 1, 2, 0]
+                            {
+                                "Agility" : 1,
+                                "Intelligence" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Intelligence" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Intelligence" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Intelligence" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Intelligence" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Intelligence" : 2,
+                            },
+                            {
+                                "Agility" : 1,
+                                "Intelligence" : 2,
+                            },
                         ],
                         skills: [
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            {
+                                "Path-finding" : 1,
+                            },
+                            {
+                                "Path-finding" : 1,
+                            },
+                            {
+                                "Path-finding" : 1,
+                            },
+                            {
+                                "Path-finding" : 1,
+                            },
+                            {
+                                "Path-finding" : 1,
+                            },
+                            {
+                                "Path-finding" : 1,
+                            },
+                            {
+                                "Path-finding" : 1,
+                            },
                         ],
                         gold: [0, 800, 0, 0, 0, 500, 500],
                         honor: [2, 2, 13, 3, 3, 0, 3],
@@ -419,11 +972,11 @@
             var sttext = "";
             sttext += "<tr>";
             sttext += "<th scope=\"row\">Base</th>";
-            for(var i = 0; i < base.attrs.length; i++) {
-                sttext += "<td>" + base.attrs[i] + "</td>";
+            for(var i = 0; i < attrs.length; i++) {
+                sttext += "<td>" + (!!base.attrs[attrs[i]] ? base.attrs[attrs[i]] : 0) + "</td>";
             }
-            for(var i = 0; i < base.skills.length; i++) {
-                sttext += "<td>" + ((base.skills[i] == 0) ? '' : base.skills[i]) + "</td>";
+            for(var i = 0; i < skills.length; i++) {
+                sttext += "<td>" + (!!base.skills[skills[i]] ? base.skills[skills[i]] : '') + "</td>";
             }
             sttext += "</tr>";
             
@@ -464,9 +1017,21 @@
             
             // update values on change
             $('select').on('change', function() {
-                var copyAttr = base.attrs.slice(0);
-                var copySkill = base.skills.slice(0);
-                var copyProf = base.profs.slice(0);
+                var copyAttr = [];
+                for (var i = 0; i < attrs.length; i++) {
+                    copyAttr[attrs[i]] = !!base.attrs[attrs[i]] ? base.attrs[attrs[i]] : 0;
+                }
+                
+                var copySkill = [];
+                for (var i = 0; i < skills.length; i++) {
+                    copySkill[skills[i]] = !!base.skills[skills[i]] ? base.skills[skills[i]] : 0;
+                }
+                
+                var copyProf = [];
+                for (var i = 0; i < profs.length; i++) {
+                    copyProf[profs[i]] = !!base.profs[profs[i]] ? base.profs[profs[i]] : 0;
+                }
+                
                 var gold = 300;
                 var honor = 0;
                 var renown = 0;
@@ -491,24 +1056,24 @@
                         if(dep == -1) {
                             // fill in attr and skill values
                             cells.each(function(n, item){
-                                if(n < copyAttr.length) {
-                                    val = stages[i][sel].attrs[n];
-                                    copyAttr[n] += val;
+                                if(n < attrs.length) {
+                                    val = stages[i][sel].attrs[attrs[n]];
+                                    copyAttr[attrs[n]] += (!!val ? val : 0);
                                 }
                                 else {
-                                    val = stages[i][sel].skills[n - copyAttr.length];
-                                    copySkill[n - copyAttr.length] += val;
+                                    val = stages[i][sel].skills[skills[n - attrs.length]];
+                                    copySkill[skills[n - attrs.length]] += (!!val ? val : 0);
                                 }
-                                if(val == 0)
-                                    $(item).html('');
-                                else
+                                if(!!val)
                                     $(item).html(val);
+                                else
+                                    $(item).html('');
                             });
                             
                             // add other things
                             if('profs' in stages[i][sel])
-                                for(var j= 0; j < copyProf.length; j++) {
-                                    copyProf[j] += stages[i][sel].profs[j];
+                                for(var j= 0; j < profs.length; j++) {
+                                    copyProf[j] += !!stages[i][sel].profs[profs[j]] ? stages[i][sel].profs[profs[j]] : 0;
                                 }
                             
                             if('gold' in stages[i][sel])
@@ -541,24 +1106,24 @@
                             }
                             else {
                                 cells.each(function(n, item){
-                                    if(n < copyAttr.length) {
-                                        val = stages[i][sel].attrs[depSel][n];
-                                        copyAttr[n] += val;
+                                    if(n < attrs.length) {
+                                        val = stages[i][sel].attrs[depSel][attrs[n]];
+                                        copyAttr[attrs[n]] += (!!val ? val : 0);
                                     }
                                     else {
-                                        val = stages[i][sel].skills[depSel][n - copyAttr.length];
-                                        copySkill[n - copyAttr.length] += val;
+                                        val = stages[i][sel].skills[depSel][skills[n - attrs.length]];
+                                        copySkill[skills[n - attrs.length]] += (!!val ? val : 0);
                                     }
-                                    if(val == 0)
-                                        $(item).html('');
-                                    else
+                                    if(!!val)
                                         $(item).html(val);
+                                    else
+                                        $(item).html('');
                                 });
                                 
                                 // add other things
                                 if('profs' in stages[i][sel])
-                                    for(var j= 0; j < copyProf.length; j++) {
-                                        copyProf[j] += stages[i][sel].profs[depSel][j];
+                                    for(var j= 0; j < profs.length; j++) {
+                                        copyProf[profs[j]] += !!stages[i][sel].profs[depSel][profs[j]] ? stages[i][sel].profs[depSel][profs[j]] : 0;
                                     }
                                 
                                 if('gold' in stages[i][sel])
@@ -590,10 +1155,10 @@
                 var totalWasted = 0;
                 var cells = $('#resTab > tbody > tr:nth-child(' + (stages.length+2) + ') > td');
                 cells.each(function(n, item){
-                    if(n < copyAttr.length)
-                        $(item).html((copyAttr[n] == 0) ? '' :  copyAttr[n]);
+                    if(n < attrs.length)
+                        $(item).html(!!copyAttr[attrs[n]] ? copyAttr[attrs[n]] : '');
                     else {
-                        var sum = copySkill[n - copyAttr.length];
+                        var sum = copySkill[skills[n - attrs.length]];
                         if(sum == 0) {
                             $(item).html('');
                         }
@@ -624,9 +1189,9 @@
                 sltext += "</span></li>";
                 
                 var proftext = "<li class=\"list-group-item active\">Weapon Proficiencies</li>";
-                for(var i = 0; i < copyProf.length; i++) {
-                    totalSkill += copyProf[i];
-                    proftext += "<li class=\"list-group-item\">" + profs[i] + " :<span class=\"float-right font-weight-bold\">" + copyProf[i] + "</span></li>";
+                for(var i = 0; i < profs.length; i++) {
+                    totalSkill += copyProf[profs[i]];
+                    proftext += "<li class=\"list-group-item\">" + profs[i] + " :<span class=\"float-right font-weight-bold\">" + copyProf[profs[i]] + "</span></li>";
                 }
                 
                 var notestext = "<li class=\"list-group-item active\">Notes</li>";
@@ -660,7 +1225,7 @@
     </script>
 </head>
 <body>
-    <p class="lead text-center">Mount & Blade: Warband Prophesy of Pendor (3.9.1) Character Creation Tool</p>
+    <p class="lead text-center">Mount & Blade: Warband Prophesy of Pendor (3.9.4) Character Creation Tool</p>
     <p class="lead text-center">Please create an issue on <a href="https://github.com/azakhi/azakhi.github.io" class="alert-link">Github page</a> if you find any problems</p>
     
     <p id="buildLink"></p>
