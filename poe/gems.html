@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leveled Gems</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <style type="text/css">
+    td.best {
+      color: green;
+    }
+  </style>
+  <script src="syndicate_data.js"></script>
+  <script type="text/javascript">
+    let maxLevelMapping = {
+      'Empower Support': 3,
+      'Enhance Support': 3,
+      'Enlighten Support': 3,
+      'Flesh and Stone' : 6,
+      'Blood and Sand' : 6,
+    };
+    
+    let expMapping = {
+      'Empower Support': 1666,
+      'Enhance Support': 1666,
+      'Enlighten Support': 1666,
+      'Flesh and Stone' : 529,
+      'Blood and Sand' : 529,
+    };
+    
+    function fetchLeagues() {
+      $.get( "https://api.poe.watch/leagues", {})
+        .done(function( data ) {
+          data.reverse();
+          for(let item of data) {
+            $('#leagueSelect').append('<option value="' + item.name + '">' + item.name + '</option>');
+          }
+          
+          fetchPrices(data[0].name);
+        });
+    }
+  
+    function fetchPrices(league) {
+      console.log(league);
+    
+      $.get( "https://api.poe.watch/get?league=" + league + "&category=gem", {})
+        .done(function( data ) {
+          let gems = {};
+          let totalSum = 0;
+          let acceptedSum = 0;
+          let count = 0;
+          for (let item of data) {
+            totalSum += item.total;
+            acceptedSum += item.accepted;
+            count++;
+          }
+          
+          totalSum /= count;
+          acceptedSum /= count;
+          
+          for (let item of data) {
+            if (item.total < (totalSum / 5) && item.accepted < (acceptedSum / 5)) {
+              continue;
+            }
+            
+            let histAvg = 0;
+            for (let hist of item.history) histAvg += hist;
+            histAvg /= item.history.length;
+            
+            //console.log(item.history.length);
+            //console.log(histAvg);
+            if (item.min > (histAvg * 1.5)) {
+              continue;
+            }
+            
+            item.gemIsCorrupted = item.gemIsCorrupted ? 1 : 0;
+            
+            if (!Array.isArray(gems[item.name])) {
+              gems[item.name] = Array.from({length: 22}, e => Array.from({length: 24}, e => [{min: 0}, {min: 0}]));
+            }
+            
+            item.min = parseFloat(item.min).toFixed(3);
+            gems[item.name][item.gemLevel][item.gemQuality][item.gemIsCorrupted] = item;
+          }
+          
+          let gemDatas = [];
+          for (let gemName in gems) {
+            if (gemName.startsWith("Vaal ")) {
+              continue;
+            }
+          
+            let maxLevel = maxLevelMapping[gemName] ? maxLevelMapping[gemName] : 20;
+            if (maxLevelMapping[gemName]) {
+              //console.log(gemName);
+              //console.log(gems[gemName]);
+            }
+            let gem = gems[gemName];
+            
+            // Give min values for some if none listed
+            gem[1][20][0].min = (gem[1][20][0].min != 0) ? gem[1][20][0].min : gem[1][20][1].min;
+            gem[maxLevel][0][0].min = (gem[maxLevel][0][0].min != 0) ? gem[maxLevel][0][0].min : gem[maxLevel][0][1].min;
+            gem[maxLevel][20][0].min = (gem[maxLevel][20][0].min != 0) ? gem[maxLevel][20][0].min : gem[maxLevel][20][1].min;
+            gem[maxLevel + 1][0][1].min = (gem[maxLevel + 1][0][1].min != 0) ? gem[maxLevel + 1][0][1].min : gem[maxLevel][0][0].min;
+            gem[maxLevel + 1][20][1].min = (gem[maxLevel + 1][20][1].min != 0) ? gem[maxLevel + 1][20][1].min : gem[maxLevel][20][0].min;
+            gem[1][23][1].min = (gem[1][23][1].min != 0) ? gem[1][23][1].min : gem[1][20][1].min;
+            gem[maxLevel][23][1].min = (gem[maxLevel][23][1].min != 0) ? gem[maxLevel][23][1].min : gem[maxLevel][20][1].min;
+            gem[maxLevel + 1][23][1].min = (gem[maxLevel + 1][23][1].min != 0) ? gem[maxLevel + 1][23][1].min : gem[maxLevel + 1][20][1].min;
+            
+            
+            let vaalGem = !!gems["Vaal " + gemName] ? gems["Vaal " + gemName] : gem;
+            let gemData = {
+              'name': gemName,
+              'level1Q20': gem[1][20][0].min,
+              'levelMaxQ0': gem[maxLevel][0][0].min,
+              'levelMaxQ20': gem[maxLevel][20][0].min,
+              'levelMaxQ20Corrupt': gem[maxLevel][20][1].min,
+              'levelMaxQ0Corrupt': gem[maxLevel][0][1].min,
+              'levelPlusQ0': gem[maxLevel + 1][0][1].min,
+              'levelPlusQ20': gem[maxLevel + 1][20][1].min,
+              'levelPlusQ23': gem[maxLevel + 1][23][1].min,
+              'corruptAvg' : gem[maxLevel][0][1].min * 0.25 + // Nothing
+                vaalGem[maxLevel][0][1].min * 0.25 + // Vaal
+                gem[maxLevel][0][1].min * 0.125 + // + Quality
+                gem[maxLevel][0][1].min * 0.125 + // - Quality
+                gem[maxLevel + 1][0][1].min * 0.125 + // + Level
+                gem[maxLevel - 1][0][1].min * 0.125, // - Level
+              'corruptAvgQ20' : gem[maxLevel][20][1].min * 0.25 + // Nothing
+                vaalGem[maxLevel][20][1].min * 0.25 + // Vaal
+                gem[maxLevel][23][1].min * 0.125 + // + Quality
+                gem[maxLevel][0][1].min * 0.125 + // - Quality
+                gem[maxLevel + 1][20][1].min * 0.125 + // + Level
+                gem[maxLevel - 1][20][1].min * 0.125, // - Level
+              'doubleCorruptAvg' : gem[maxLevel][0][1].min * 0.25 * 0.25 + // Nothing * Nothing
+                vaalGem[maxLevel][0][1].min * 0.25 * 0.25 + // Nothing * Vaal
+                gem[maxLevel][0][1].min * 0.25 * 0.125 + // Nothing * + Quality
+                gem[maxLevel][0][1].min * 0.25 * 0.125 + // Nothing * - Quality
+                gem[maxLevel + 1][0][1].min * 0.25 * 0.125 + // Nothing * + Level
+                gem[maxLevel - 1][0][1].min * 0.25 * 0.125 + // Nothing * - Level
+                
+                vaalGem[maxLevel][0][1].min * 0.25 * 0.25 + // Vaal * Nothing
+                vaalGem[maxLevel][0][1].min * 0.25 * 0.25 + // Vaal * Vaal
+                vaalGem[maxLevel][0][1].min * 0.25 * 0.125 + // Vaal * + Quality
+                vaalGem[maxLevel][0][1].min * 0.25 * 0.125 + // Vaal * - Quality
+                vaalGem[maxLevel + 1][0][1].min * 0.25 * 0.125 + // Vaal * + Level
+                vaalGem[maxLevel - 1][0][1].min * 0.25 * 0.125 + // Vaal * - Level
+                
+                gem[maxLevel][0][1].min * 0.125 * 0.25 + // + Quality * Nothing
+                vaalGem[maxLevel][0][1].min * 0.125 * 0.25 + // + Quality * Vaal
+                gem[maxLevel][0][1].min * 0.125 * 0.125 + // + Quality * + Quality
+                gem[maxLevel][0][1].min * 0.125 * 0.125 + // + Quality * - Quality
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.125 + // + Quality * + Level
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.125 + // + Quality * - Level
+                
+                gem[maxLevel][0][1].min * 0.125 * 0.25 + // - Quality * Nothing
+                vaalGem[maxLevel][0][1].min * 0.125 * 0.25 + // - Quality * Vaal
+                gem[maxLevel][0][1].min * 0.125 * 0.125 + // - Quality * + Quality
+                gem[maxLevel][0][1].min * 0.125 * 0.125 + // - Quality * - Quality
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.125 + // - Quality * + Level
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.125 + // - Quality * - Level
+                
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.25 + // + Level * Nothing
+                vaalGem[maxLevel + 1][0][1].min * 0.125 * 0.25 + // + Level * Vaal
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.125 + // + Level * + Quality
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.125 + // + Level * - Quality
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.125 + // + Level * + Level
+                gem[maxLevel][0][1].min * 0.125 * 0.125 + // + Level * - Level
+                
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.25 + // - Level * Nothing
+                vaalGem[maxLevel - 1][0][1].min * 0.125 * 0.25 + // - Level * Vaal
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.125 + // - Level * + Quality
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.125 + // - Level * - Quality
+                gem[maxLevel][0][1].min * 0.125 * 0.125 + // - Level * + Level
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.125, // - Level * - Level
+              'doubleCorruptAvgQ20' : gem[maxLevel][20][1].min * 0.25 * 0.25 + // Nothing * Nothing
+                vaalGem[maxLevel][20][1].min * 0.25 * 0.25 + // Nothing * Vaal
+                gem[maxLevel][23][1].min * 0.25 * 0.125 + // Nothing * + Quality
+                gem[maxLevel][0][1].min * 0.25 * 0.125 + // Nothing * - Quality
+                gem[maxLevel + 1][20][1].min * 0.25 * 0.125 + // Nothing * + Level
+                gem[maxLevel - 1][20][1].min * 0.25 * 0.125 + // Nothing * - Level
+                
+                vaalGem[maxLevel][20][1].min * 0.25 * 0.25 + // Vaal * Nothing
+                vaalGem[maxLevel][20][1].min * 0.25 * 0.25 + // Vaal * Vaal
+                vaalGem[maxLevel][23][1].min * 0.25 * 0.125 + // Vaal * + Quality
+                vaalGem[maxLevel][0][1].min * 0.25 * 0.125 + // Vaal * - Quality
+                vaalGem[maxLevel + 1][20][1].min * 0.25 * 0.125 + // Vaal * + Level
+                vaalGem[maxLevel - 1][20][1].min * 0.25 * 0.125 + // Vaal * - Level
+                
+                gem[maxLevel][23][1].min * 0.125 * 0.25 + // + Quality * Nothing
+                vaalGem[maxLevel][23][1].min * 0.125 * 0.25 + // + Quality * Vaal
+                gem[maxLevel][23][1].min * 0.125 * 0.125 + // + Quality * + Quality
+                gem[maxLevel][20][1].min * 0.125 * 0.125 + // + Quality * - Quality
+                gem[maxLevel + 1][23][1].min * 0.125 * 0.125 + // + Quality * + Level
+                gem[maxLevel - 1][23][1].min * 0.125 * 0.125 + // + Quality * - Level
+                
+                gem[maxLevel][0][1].min * 0.125 * 0.25 + // - Quality * Nothing
+                vaalGem[maxLevel][0][1].min * 0.125 * 0.25 + // - Quality * Vaal
+                gem[maxLevel][20][1].min * 0.125 * 0.125 + // - Quality * + Quality
+                gem[maxLevel][0][1].min * 0.125 * 0.125 + // - Quality * - Quality
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.125 + // - Quality * + Level
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.125 + // - Quality * - Level
+                
+                gem[maxLevel + 1][20][1].min * 0.125 * 0.25 + // + Level * Nothing
+                vaalGem[maxLevel + 1][20][1].min * 0.125 * 0.25 + // + Level * Vaal
+                gem[maxLevel + 1][23][1].min * 0.125 * 0.125 + // + Level * + Quality
+                gem[maxLevel + 1][0][1].min * 0.125 * 0.125 + // + Level * - Quality
+                gem[maxLevel + 1][20][1].min * 0.125 * 0.125 + // + Level * + Level
+                gem[maxLevel][20][1].min * 0.125 * 0.125 + // + Level * - Level
+                
+                gem[maxLevel - 1][20][1].min * 0.125 * 0.25 + // - Level * Nothing
+                vaalGem[maxLevel - 1][20][1].min * 0.125 * 0.25 + // - Level * Vaal
+                gem[maxLevel - 1][23][1].min * 0.125 * 0.125 + // - Level * + Quality
+                gem[maxLevel - 1][0][1].min * 0.125 * 0.125 + // - Level * - Quality
+                gem[maxLevel][20][1].min * 0.125 * 0.125 + // - Level * + Level
+                gem[maxLevel - 1][20][1].min * 0.125 * 0.125, // - Level * - Level
+            };
+            
+            gemData.corruptAvg = parseFloat(gemData.corruptAvg).toFixed(3);
+            gemData.corruptAvgQ20 = parseFloat(gemData.corruptAvgQ20).toFixed(3);
+            gemData.doubleCorruptAvg = parseFloat(gemData.doubleCorruptAvg).toFixed(3);
+            gemData.doubleCorruptAvgQ20 = parseFloat(gemData.doubleCorruptAvgQ20).toFixed(3);
+            let expReq = expMapping[gemName] ? expMapping[gemName] : 342;
+            let avgs = [];
+            avgs.push(gemData.levelMaxQ0);
+            avgs.push(gemData.levelMaxQ20 / 2);
+            avgs.push(gemData.corruptAvg);
+            avgs.push(gemData.corruptAvgQ20 / 2);
+            //avgs.push(gemData.doubleCorruptAvg);
+            //avgs.push(gemData.doubleCorruptAvgQ20 / 2);
+            gemData.bestOption = Math.max(...avgs);
+            gemData.best = parseFloat(gemData.bestOption / expReq).toFixed(3);
+            gemData.doubleBest = parseFloat(Math.max(...[gemData.best, gemData.doubleCorruptAvg, gemData.doubleCorruptAvgQ20]) / expReq).toFixed(3);
+            
+            gemDatas.push(gemData);
+          }
+          gemDatas.sort((a, b) => b.best - a.best);
+          
+          $('#resTab > tbody').html('');
+          for (let gemData of gemDatas) {
+            let line = '<tr>';
+            line += '<td>' + gemData.name + '</td>';
+            line += '<td>' + gemData.best + '</td>';
+            line += '<td>' + gemData.doubleBest + '</td>';
+            line += '<td' + (gemData.bestOption == gemData.levelMaxQ0 ? ' class="best" ' : '') + '>' + gemData.levelMaxQ0 + '</td>';
+            line += '<td' + (gemData.bestOption == gemData.levelMaxQ20 / 2 ? ' class="best" ' : '') + '>' + gemData.levelMaxQ20 + '</td>';
+            line += '<td' + (gemData.bestOption == gemData.levelPlusQ0 ? ' class="best" ' : '') + '>' + gemData.levelPlusQ0 + '</td>';
+            line += '<td>' + gemData.levelPlusQ20 + '</td>';
+            line += '<td>' + gemData.levelPlusQ23 + '</td>';
+            line += '<td' + (gemData.bestOption == gemData.corruptAvg ? ' class="best" ' : '') + '>' + gemData.corruptAvg + '</td>';
+            line += '<td' + (gemData.bestOption == gemData.corruptAvgQ20 / 2 ? ' class="best" ' : '') + '>' + gemData.corruptAvgQ20 + '</td>';
+            line += '</tr>';
+          
+            $('#resTab > tbody').append(line);
+          }
+          
+          console.log(gemDatas);
+        })
+        .fail(function( data ) {
+            console.log(data);
+        });
+    }
+  
+    $( document ).ready(function() {
+      $('#leagueSelect').on('change', function() {
+        fetchPrices($('#leagueSelect').val());
+      });
+      fetchLeagues();
+    });
+  </script>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <select id="leagueSelect"></select>
+    </div>
+    <div class="row">
+      <table id="resTab" class="table table-bordered table-dark table-sm table-striped">
+        <thead>
+          <tr>
+            <th>Gem</th>
+            <th>Best</th>
+            <th>DC Best</th>
+            <th>LMx Q0</th>
+            <th>LMx Q20</th>
+            <th>LMx+1 Q0</th>
+            <th>LMx+1 Q20</th>
+            <th>LMx+1 Q23</th>
+            <th>Corrupt Avg</th>
+            <th>Corrupt Avg Q20</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
