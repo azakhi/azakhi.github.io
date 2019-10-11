@@ -1175,7 +1175,7 @@
                 });
                 
                 var sltext = "";
-                if($('#stage1').val() != 1 && $('#stage1').val() != 4 && $('#stage1').val() != 5)
+                if($('#stage1').val() == 0 || $('#stage1').val() == 2 || $('#stage1').val() == 6)
                     sltext += "<li class=\"list-group-item\">Banner :<span class=\"float-right font-weight-bold text-success\">Yes</span></li>";
                 else
                     sltext += "<li class=\"list-group-item\">Banner :<span class=\"float-right font-weight-bold text-danger\">No</span></li>";
